@@ -1,0 +1,8 @@
+{
+    "com.brodysoft.sqlitePlugin": {
+        "source": {
+            "type": "registry",
+            "id": "com.brodysoft.sqliteplugin"
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "com.brodysoft.sqlitePlugin": {
+      "PACKAGE_NAME": "fs.ejemplobd.bd"
+    }
+  },
+  "dependent_plugins": {},
+  "modules": [
+    {
+      "file": "plugins/com.brodysoft.sqlitePlugin/www/SQLitePlugin.js",
+      "id": "com.brodysoft.sqlitePlugin.SQLitePlugin",
+      "pluginId": "com.brodysoft.sqlitePlugin",
+      "clobbers": [
+        "SQLitePlugin"
+      ]
+    }
+  ],
+  "plugin_metadata": {
+    "com.brodysoft.sqlitePlugin": "1.0.6"
+  }
+}

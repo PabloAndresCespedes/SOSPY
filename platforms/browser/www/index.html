@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+       
+       
+        <script src="js/jquery-2.1.3.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+       <!--
+            <script type="text/javascript" src="cordova.js"></script>
+
+   -->
+   
+        <script type="text/javascript"></script>
+
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.css">
+        <script>
+        var db=null;
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        function onDeviceReady(){
+            console.log("device is ready");
+            //db = window.sqlitePlugin.importPrepopulatedDatabase({file: "s", "importIfExists": true});
+            db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
+            if(db!=null){
+                listarTodasCiudades();
+            }
+            else{
+                console.log("error al abrir bd");
+            }
+        }
+
+        function listarTodasCiudades(){
+            db.transaction(listar,error);
+        }
+
+        function listar(tx){
+            tx.executeSql("Select D.DESCRIPCION ||' = '||T.NUMERO AS DESCRIPCION from DEPENDENCIAS D INNER JOIN TELEFONOS T ON (D.ID = T.ID_DEPENDENCIAS)",[],function(tx,result){
+                var nciu=result.rows.length;
+                var html="";
+                console.log("num ciudades="+nciu);
+                if(nciu>0){
+                    for(var i=0; i<nciu; i++){
+                        var fila=result.rows.item(i);
+                        html+="<div sytle='background-color: yellow; font-weight:bold;'>"+"Dependencia:"+fila['DESCRIPCION']+"</div>";
+                    }
+                    $('#contenido').html(html);
+                }
+                else{
+                    console.log("no hay datos");
+                }
+
+            });
+
+        }
+        function error(err){
+            console.log("error ="+err.message);
+        }
+
+
+        </script>
+        <title>app ciudades</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>Lista de Dependencias</h1>
+            <div id="contenido" class="">
+               
+
+            </div>
+        </div>
+       
+    </body>
+</html>
