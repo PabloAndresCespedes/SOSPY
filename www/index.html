@@ -32,80 +32,80 @@
         <link rel="stylesheet" href="css/bootstrap-theme.css">
         <script>
           var db=null;
-        document.addEventListener("deviceready", onDeviceReady, false);
-
-        function onDeviceReady(){
-            console.log("device is ready");
-            db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
-
-            if(db!=null){
-                listarTodasCiudades();
+            document.addEventListener("deviceready", onDeviceReady, false);
+            /*FUNCION POR DEFECTO DE CORDOVA UTILIZADA COMO ONLOAD, PARA CONECTAR A LA BASE DE DATOS*/
+            function onDeviceReady(){
+                console.log("device is ready");
+                db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
+                /*COMPRUEBA QUE LA CONEXION SEA EXITOSA PARA EJECUTAR LA FUNCION*/
+                if(db!=null){
+                    listarTodosDepartamentos();
+                }
+                else{
+                    console.log("error al abrir bd");
+                }
             }
-            else{
-                console.log("error al abrir bd");
+            /*FUNCION QUE RETORNA LOS DEPARTAMENTOS*/
+            function listarTodosDepartamentos(){
+                db.transaction(listarDepartamentos,error);
             }
-        }
-
-        function listarTodasCiudades(){
-            db.transaction(listar,error);
-        }
-        
-        function listarComisariaTodo(){
-            db.transaction(listarComisaria,error);
-        }
-
-        function listar(tx){
-            tx.executeSql("select ID, DESCRIPCION from DEPARTAMENTOS",[],function(tx,result){
-                var ndepartamento=result.rows.length;
-                var html="";
-                var html2="";
-                
-                if(ndepartamento > 0){
+            /*FUNCION QUE RETORNA LAS DEPENDENCIAS*/
+            function listarTodasDependencias(){
+                db.transaction(listarDependencias,error);
+            }
+            /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
+            function listarDepartamentos(tx){
+                /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
+                tx.executeSql("select ID, DESCRIPCION from DEPARTAMENTOS",[],function(tx,result){
+                    var nDepartamentos = result.rows.length;
+                    var html="";
                     
-                    for(var i = 0; i < ndepartamento; i++){
-                        var fila=result.rows.item(i);
-                        html+="<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                    if(nDepartamentos > 0){
+                        
+                        for(var i = 0; i < nDepartamentos; i++){
+                            var fila = result.rows.item(i);
+                            html += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                        }
+                        $('#departamento').html(html);
+                                        
                     }
-                    $('#departamento').html(html);
-                                       
-                }
-                else{
-                    console.log("no hay datos");
-                }
-
-            });
-
-        }
-
-        function listarComisaria(tx){
-            var v_id_com = document.getElementById('departamento').selectedIndex;
-
-            tx.executeSql("select ID, DESCRIPCION from DEPENDENCIAS where ID_DEPARTAMENTO = "+ v_id_com, [],function(tx,result){
-                var nComisarias=result.rows.length;
-                var html="";
-                var html2="";
-                
-                if(nComisarias > 0){
-                    for(var i = 0; i < nComisarias; i++){
-                        var fila=result.rows.item(i);
-                        html+="<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                    else{
+                        console.log("no hay datos");
                     }
-                    $('#comisaria').html(html);
-                                       
-                }
-                else{
-                    console.log("no hay datos");
-                }
 
-            });
-            function prueba(){alert('prueba')};
-        }
+                });
 
-        /*selectedIndex capturar cambios*/ 
-        function error(err){
-            console.log("error ="+err.message);
-        }
-        
+            }
+            /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
+            function listarDependencias(tx){
+                var v_id_com = document.getElementById('departamento').selectedIndex;
+                /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
+                tx.executeSql("select ID, DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+ v_id_com, [],function(tx,result){
+                    var nDependencias = result.rows.length;
+                    var htmlContenidoDescripcion = "";
+                    /*COMPRUEBA SI HAY DEPENDENCIAS EN ESE DEPARTAMENTO QUE TRAJO EL SELECT ANTERIOR*/
+                    if(nDependencias > 0){
+                        /*BUCLE QUE CAMPTURA LAS CONSULTAS Y LOS CONCATENA EN LA VARIABLE htmlContenidoDescripcion*/
+                        for(var i = 0; i < nDependencias; i++){
+                            var fila = result.rows.item(i);
+                            htmlContenidoDescripcion += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                        }
+                        /*SE INSERTAN LOS DATOS DE LA VARIABLE htmlContenidoDescripcion EN EL TAG CON ID dependencia*/
+                        $('#dependencia').html(html);
+                                        
+                    }
+                    else{
+                        alert("no hay datos");
+                    }
+
+                });
+            }
+
+            /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/ 
+            function error(err){
+                alert("error =" + err.message);
+            }
+            
 
         </script>
 
@@ -129,14 +129,14 @@
             <hr>
 
             <h2>Seleccione su:</h2><br>
-            <select class="custom-select" id="departamento" onchange="listarComisariaTodo()">
+            <select class="custom-select" id="departamento" onchange="listarTodasDependencias()">
               <option selected>Departamento</option>
 
             </select>
 
             <br><br>
 
-            <select class="custom-select clase" id="comisaria">
+            <select class="custom-select clase" id="dependencia">
               <option selected >Dependencia Cercana</option>
 
             </select>

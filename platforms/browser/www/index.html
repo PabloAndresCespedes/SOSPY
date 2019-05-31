@@ -32,47 +32,80 @@
         <link rel="stylesheet" href="css/bootstrap-theme.css">
         <script>
           var db=null;
-        document.addEventListener("deviceready", onDeviceReady, false);
-
-        function onDeviceReady(){
-            console.log("device is ready");
-            //db = window.sqlitePlugin.importPrepopulatedDatabase({file: "s", "importIfExists": true});
-            db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
-            if(db!=null){
-                listarTodasCiudades();
-            }
-            else{
-                alert("error al abrir bd");
-            }
-        }
-
-        function listarTodasCiudades(){
-            db.transaction(listar,error);
-        }
-
-        function listar(tx){
-            tx.executeSql("Select D.DESCRIPCION ||' = '||T.NUMERO AS DESCRIPCION from DEPENDENCIAS D INNER JOIN TELEFONOS T ON (D.ID = T.ID_DEPENDENCIAS)",[],function(tx,result){
-                var nciu=result.rows.length;
-                var html="";
-                console.log("num ciudades="+nciu);
-                if(nciu>0){
-                    for(var i=0; i<nciu; i++){
-                        var fila=result.rows.item(i);
-                        html+="<div sytle='background-color: yellow; font-weight:bold;'>"+"Dependencia:"+fila['DESCRIPCION']+"</div>";
-                    }
-                    $('#contenido').html(html);
+            document.addEventListener("deviceready", onDeviceReady, false);
+            /*FUNCION POR DEFECTO DE CORDOVA UTILIZADA COMO ONLOAD, PARA CONECTAR A LA BASE DE DATOS*/
+            function onDeviceReady(){
+                console.log("device is ready");
+                db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
+                /*COMPRUEBA QUE LA CONEXION SEA EXITOSA PARA EJECUTAR LA FUNCION*/
+                if(db!=null){
+                    listarTodosDepartamentos();
                 }
                 else{
-                    console.log("no hay datos");
+                    console.log("error al abrir bd");
                 }
+            }
+            /*FUNCION QUE RETORNA LOS DEPARTAMENTOS*/
+            function listarTodosDepartamentos(){
+                db.transaction(listarDepartamentos,error);
+            }
+            /*FUNCION QUE RETORNA LAS DEPENDENCIAS*/
+            function listarTodasDependencias(){
+                db.transaction(listarDependencias,error);
+            }
+            /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
+            function listarDepartamentos(tx){
+                /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
+                tx.executeSql("select ID, DESCRIPCION from DEPARTAMENTOS",[],function(tx,result){
+                    var nDepartamentos = result.rows.length;
+                    var html="";
+                    
+                    if(nDepartamentos > 0){
+                        
+                        for(var i = 0; i < nDepartamentos; i++){
+                            var fila = result.rows.item(i);
+                            html += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                        }
+                        $('#departamento').html(html);
+                                        
+                    }
+                    else{
+                        console.log("no hay datos");
+                    }
 
-            });
+                });
 
-        }
-        function error(err){
-            console.log("error ="+err.message);
-        }
+            }
+            /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
+            function listarDependencias(tx){
+                var v_id_com = document.getElementById('departamento').selectedIndex;
+                /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
+                tx.executeSql("select ID, DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+ v_id_com, [],function(tx,result){
+                    var nDependencias = result.rows.length;
+                    var htmlContenidoDescripcion = "";
+                    /*COMPRUEBA SI HAY DEPENDENCIAS EN ESE DEPARTAMENTO QUE TRAJO EL SELECT ANTERIOR*/
+                    if(nDependencias > 0){
+                        /*BUCLE QUE CAMPTURA LAS CONSULTAS Y LOS CONCATENA EN LA VARIABLE htmlContenidoDescripcion*/
+                        for(var i = 0; i < nDependencias; i++){
+                            var fila = result.rows.item(i);
+                            htmlContenidoDescripcion += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                        }
+                        /*SE INSERTAN LOS DATOS DE LA VARIABLE htmlContenidoDescripcion EN EL TAG CON ID dependencia*/
+                        $('#dependencia').html(html);
+                                        
+                    }
+                    else{
+                        alert("no hay datos");
+                    }
 
+                });
+            }
+
+            /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/ 
+            function error(err){
+                alert("error =" + err.message);
+            }
+            
 
         </script>
 
@@ -87,31 +120,30 @@
        
         <div class="container-fluid">
            <h1>
-                Bienvenido a<br>
-                tu aplicación de emergencia<br>
-            </h1>
-            
+                Bienvenido a<br\>
+                tu aplicación de emergencia<br\>
+          </h1>
+            <div id="contenido"></div>
             
 
             <hr>
 
             <h2>Seleccione su:</h2><br>
-            <select class="custom-select" id="contenido">
+            <select class="custom-select" id="departamento" onchange="listarTodasDependencias()">
               <option selected>Departamento</option>
+
             </select>
 
             <br><br>
 
-            <select class="custom-select" id="comisaria" >
-              <option selected>Comisaría más cercana</option>
-              <option value="1">Obligado</option>
-              <option value="2">Hohenau</option>
-              <option value="3">Bella Vista</option>
+            <select class="custom-select clase" id="dependencia">
+              <option selected >Dependencia Cercana</option>
+
             </select>
         </div>
 
        
-            <button class="btn btn-danger" type="button" id="siguiente">
+            <button class="btn btn-danger siguiente" type="button" id="siguiente">
                 <a href="index2.html"></a>
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
             </button>
