@@ -79,8 +79,6 @@
             /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
             function listarDependencias(tx){
                 var v_id_com = $('#departamento').val();
-                
-                alert(v_id_com);
                 /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
                 tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+v_id_com , [],function(tx,result){
                     var nDependencias = result.rows.length;

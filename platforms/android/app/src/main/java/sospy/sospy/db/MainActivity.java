@@ -17,7 +17,7 @@
        under the License.
  */
 
-package fs.ejemplobd.bd;
+package sospy.sospy.db;
 
 import android.os.Bundle;
 import org.apache.cordova.*;

@@ -1,16 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fs.ejemplobd.bd" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="sospy.sospy.db" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="SQLitePlugin">
         <param name="android-package" value="org.pgsqlite.SQLitePlugin" />
     </feature>
-    <name>BD PRE-POPULATED</name>
+    <name>SOS PY</name>
     <description>
-       Ejemplo básico para usar una base de datos precargada
+       SOS PY
     </description>
-    <author email="ejemplo@tudominio.com" href="http://tudominio.com">
-        FASD
+    <author email="sospy@sospy.com" href="http://sospy.com">
+        ESTUDIANTE DE LA CARRERA DE ANALISIS DE SISTEMAS INFORMATICOS DE LA UNAE PY.
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <icon src="www/img/SOSPY.png" />
     <preference name="loglevel" value="DEBUG" />
 </widget>
