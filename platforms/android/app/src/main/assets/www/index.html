@@ -36,7 +36,7 @@
             /*FUNCION POR DEFECTO DE CORDOVA UTILIZADA COMO ONLOAD, PARA CONECTAR A LA BASE DE DATOS*/
             function onDeviceReady(){
                 console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
+                db = window.sqlitePlugin.openDatabase({name: "sospy.db", createFromLocation: 1});
                 /*COMPRUEBA QUE LA CONEXION SEA EXITOSA PARA EJECUTAR LA FUNCION*/
                 if(db!=null){
                     listarTodosDepartamentos();
@@ -56,15 +56,15 @@
             /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
             function listarDepartamentos(tx){
                 /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
-                tx.executeSql("select ID, DESCRIPCION from DEPARTAMENTOS",[],function(tx,result){
+                tx.executeSql("select ID as 'ID', DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS",[],function(tx,result){
                     var nDepartamentos = result.rows.length;
                     var htmlContenidoDepartamentos = "";
                     
                     if(nDepartamentos > 0){
                         
-                        for(var i = 0; i < nDepartamentos; i++){
+                        for(var i = 1; i < nDepartamentos; i++){
                             var fila = result.rows.item(i);
-                            htmlContenidoDepartamentos += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] +"</option>";                        
                         }
                         $('#departamento').html(htmlContenidoDepartamentos);
                                         
@@ -75,12 +75,14 @@
 
                 });
 
-            }
+            } 
             /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
             function listarDependencias(tx){
-                var v_id_com = document.getElementById('departamento').selectedIndex;
+                var v_id_com = $('#departamento').val();
+                
+                alert(v_id_com);
                 /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
-                tx.executeSql("select ID, DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+ v_id_com, [],function(tx,result){
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+v_id_com , [],function(tx,result){
                     var nDependencias = result.rows.length;
                     var htmlContenidoDescripcion = "";
                     /*COMPRUEBA SI HAY DEPENDENCIAS EN ESE DEPARTAMENTO QUE TRAJO EL SELECT ANTERIOR*/
