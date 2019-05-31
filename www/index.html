@@ -58,15 +58,15 @@
                 /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
                 tx.executeSql("select ID, DESCRIPCION from DEPARTAMENTOS",[],function(tx,result){
                     var nDepartamentos = result.rows.length;
-                    var html="";
+                    var htmlContenidoDepartamentos = "";
                     
                     if(nDepartamentos > 0){
                         
                         for(var i = 0; i < nDepartamentos; i++){
                             var fila = result.rows.item(i);
-                            html += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                            htmlContenidoDepartamentos += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
                         }
-                        $('#departamento').html(html);
+                        $('#departamento').html(htmlContenidoDepartamentos);
                                         
                     }
                     else{
@@ -91,7 +91,7 @@
                             htmlContenidoDescripcion += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
                         }
                         /*SE INSERTAN LOS DATOS DE LA VARIABLE htmlContenidoDescripcion EN EL TAG CON ID dependencia*/
-                        $('#dependencia').html(html);
+                        $('#dependencia').html(htmlContenidoDescripcion);
                                         
                     }
                     else{
@@ -129,14 +129,14 @@
             <hr>
 
             <h2>Seleccione su:</h2><br>
-            <select class="custom-select" id="departamento" onchange="listarTodasDependencias()">
+            <select class="custom-select selectClass" id="departamento" onchange="listarTodasDependencias()">
               <option selected>Departamento</option>
 
             </select>
 
             <br><br>
 
-            <select class="custom-select clase" id="dependencia">
+            <select class="custom-select selectClass" id="dependencia">
               <option selected >Dependencia Cercana</option>
 
             </select>

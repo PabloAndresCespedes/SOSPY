@@ -149,9 +149,9 @@ h3{
     font-family: monospace;
     font-weight: bold;
 }
-#departamento,#comisaria{
+.selectClass{
     border-radius: 20px;
-    width: 90%;
+    width: 90% !important;
     margin-left: 5%;
 }
 select{
