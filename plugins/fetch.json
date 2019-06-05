@@ -1,8 +1,16 @@
 {
-    "com.brodysoft.sqlitePlugin": {
-        "source": {
-            "type": "registry",
-            "id": "com.brodysoft.sqliteplugin"
-        }
+  "com.brodysoft.sqlitePlugin": {
+    "source": {
+      "type": "registry",
+      "id": "com.brodysoft.sqliteplugin"
     }
+  },
+  "cordova-plugin-geolocation": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-geolocation@4.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }

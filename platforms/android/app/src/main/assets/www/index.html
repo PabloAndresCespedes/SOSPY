@@ -15,11 +15,9 @@
 
         <link rel="stylesheet" type="text/css" href="css/all.css">
 
-
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
        
        
@@ -106,6 +104,34 @@
                 alert("error =" + err.message);
             }
             
+            
+            function getMapLocation() {
+                navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true });
+            }
+
+            var onMapSuccess = function (position) {
+
+                Latitude = position.coords.latitude;
+                Longitude = position.coords.longitude;
+
+                crear_mapa(Latitude, Longitude);
+            }
+
+            function onMapError(error) {
+                 alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+             }
+
+             function crear_mapa(latitude, longitude){
+                var latLong = new google.maps.LatLng(latitude, longitude);
+
+                var mapOptions = {
+                    center: latLong,
+                    zoom: 2,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+             }
 
         </script>
 
@@ -136,12 +162,14 @@
 
             <br><br>
 
-            <select class="custom-select selectClass" id="dependencia">
+            <select class="custom-select selectClass" id="dependencia" onchange="getMapLocation()">
               <option selected >Dependencia Cercana</option>
 
             </select>
         </div>
+        <div id="map">
 
+        </div>
        
             <button class="btn btn-danger siguiente" type="button" id="siguiente">
                 <a href="index2.html"></a>
@@ -152,6 +180,7 @@
         <script src="js/jquery-3.3.1.slim.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVzVmPXPh9s_GOBi-99gj4s6XObi6z3NM&callback=initMap" async defer></script>
 
     </body>
 </html>

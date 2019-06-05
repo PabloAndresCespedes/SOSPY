@@ -6,7 +6,11 @@
   "config_munge": {
     "files": {}
   },
-  "installed_plugins": {},
+  "installed_plugins": {
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "fs.ejemplobd.bd"
+    }
+  },
   "dependent_plugins": {
     "com.brodysoft.sqlitePlugin": {
       "PACKAGE_NAME": "fs.ejemplobd.bd"

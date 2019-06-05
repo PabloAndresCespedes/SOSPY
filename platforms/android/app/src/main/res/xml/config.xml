@@ -3,6 +3,9 @@
     <feature name="SQLitePlugin">
         <param name="android-package" value="org.pgsqlite.SQLitePlugin" />
     </feature>
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
+    </feature>
     <name>SOS PY</name>
     <description>
        SOS PY

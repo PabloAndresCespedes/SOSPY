@@ -1,11 +1,17 @@
 {
   "background_color": "#FFF",
   "display": "standalone",
-  "name": "BD PRE-POPULATED",
-  "short_name": "BD PRE-POPULATED",
-  "version": "fs.ejemplobd.bd",
-  "description": "Ejemplo básico para usar una base de datos precargada",
-  "author": "FASD",
-  "icons": [],
+  "name": "SOS PY",
+  "short_name": "SOS PY",
+  "version": "sospy.sospy.db",
+  "description": "SOS PY",
+  "author": "ESTUDIANTE DE LA CARRERA DE ANALISIS DE SISTEMAS INFORMATICOS DE LA UNAE PY.",
+  "icons": [
+    {
+      "src": "www/img/SOSPY.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
   "start_url": "index.html"
 }

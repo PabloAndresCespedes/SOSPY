@@ -9,6 +9,9 @@
   "installed_plugins": {
     "com.brodysoft.sqlitePlugin": {
       "PACKAGE_NAME": "fs.ejemplobd.bd"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "fs.ejemplobd.bd"
     }
   },
   "dependent_plugins": {},
@@ -23,6 +26,7 @@
     }
   ],
   "plugin_metadata": {
-    "com.brodysoft.sqlitePlugin": "1.0.6"
+    "com.brodysoft.sqlitePlugin": "1.0.6",
+    "cordova-plugin-geolocation": "4.0.1"
   }
 }

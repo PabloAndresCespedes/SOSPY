@@ -15,11 +15,9 @@
 
         <link rel="stylesheet" type="text/css" href="css/all.css">
 
-
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
        
        
@@ -36,7 +34,7 @@
             /*FUNCION POR DEFECTO DE CORDOVA UTILIZADA COMO ONLOAD, PARA CONECTAR A LA BASE DE DATOS*/
             function onDeviceReady(){
                 console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({name: "sacando.db", createFromLocation: 1});
+                db = window.sqlitePlugin.openDatabase({name: "sospy.db", createFromLocation: 1});
                 /*COMPRUEBA QUE LA CONEXION SEA EXITOSA PARA EJECUTAR LA FUNCION*/
                 if(db!=null){
                     listarTodosDepartamentos();
@@ -56,17 +54,17 @@
             /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
             function listarDepartamentos(tx){
                 /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
-                tx.executeSql("select ID, DESCRIPCION from DEPARTAMENTOS",[],function(tx,result){
+                tx.executeSql("select ID as 'ID', DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS",[],function(tx,result){
                     var nDepartamentos = result.rows.length;
-                    var html="";
+                    var htmlContenidoDepartamentos = "";
                     
                     if(nDepartamentos > 0){
                         
-                        for(var i = 0; i < nDepartamentos; i++){
+                        for(var i = 1; i < nDepartamentos; i++){
                             var fila = result.rows.item(i);
-                            html += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] +"</option>";                        
                         }
-                        $('#departamento').html(html);
+                        $('#departamento').html(htmlContenidoDepartamentos);
                                         
                     }
                     else{
@@ -75,12 +73,12 @@
 
                 });
 
-            }
+            } 
             /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
             function listarDependencias(tx){
-                var v_id_com = document.getElementById('departamento').selectedIndex;
+                var v_id_com = $('#departamento').val();
                 /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
-                tx.executeSql("select ID, DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+ v_id_com, [],function(tx,result){
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+v_id_com , [],function(tx,result){
                     var nDependencias = result.rows.length;
                     var htmlContenidoDescripcion = "";
                     /*COMPRUEBA SI HAY DEPENDENCIAS EN ESE DEPARTAMENTO QUE TRAJO EL SELECT ANTERIOR*/
@@ -91,7 +89,7 @@
                             htmlContenidoDescripcion += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
                         }
                         /*SE INSERTAN LOS DATOS DE LA VARIABLE htmlContenidoDescripcion EN EL TAG CON ID dependencia*/
-                        $('#dependencia').html(html);
+                        $('#dependencia').html(htmlContenidoDescripcion);
                                         
                     }
                     else{
@@ -106,6 +104,34 @@
                 alert("error =" + err.message);
             }
             
+            
+            function getMapLocation() {
+                navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true });
+            }
+
+            var onMapSuccess = function (position) {
+
+                Latitude = position.coords.latitude;
+                Longitude = position.coords.longitude;
+
+                crear_mapa(Latitude, Longitude);
+            }
+
+            function onMapError(error) {
+                 alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+             }
+
+             function crear_mapa(latitude, longitude){
+                var latLong = new google.maps.LatLng(latitude, longitude);
+
+                var mapOptions = {
+                    center: LatLng,
+                    zoom: 11,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+             }
 
         </script>
 
@@ -129,19 +155,21 @@
             <hr>
 
             <h2>Seleccione su:</h2><br>
-            <select class="custom-select" id="departamento" onchange="listarTodasDependencias()">
+            <select class="custom-select selectClass" id="departamento" onchange="listarTodasDependencias()">
               <option selected>Departamento</option>
 
             </select>
 
             <br><br>
 
-            <select class="custom-select clase" id="dependencia">
+            <select class="custom-select selectClass" id="dependencia" onchange="getMapLocation()">
               <option selected >Dependencia Cercana</option>
 
             </select>
         </div>
+        <div id="map">
 
+        </div>
        
             <button class="btn btn-danger siguiente" type="button" id="siguiente">
                 <a href="index2.html"></a>
@@ -152,6 +180,7 @@
         <script src="js/jquery-3.3.1.slim.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVzVmPXPh9s_GOBi-99gj4s6XObi6z3NM&callback=initMap" async defer></script>
 
     </body>
 </html>

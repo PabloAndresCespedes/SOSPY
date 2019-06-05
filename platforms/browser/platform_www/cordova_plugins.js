@@ -12,7 +12,8 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "com.brodysoft.sqlitePlugin": "1.0.6"
+    "com.brodysoft.sqlitePlugin": "1.0.6",
+    "cordova-plugin-geolocation": "4.0.1"
 }
 // BOTTOM OF METADATA
 });
