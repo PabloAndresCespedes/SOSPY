@@ -104,7 +104,7 @@
                 alert("error =" + err.message);
             }
             
-            
+/*            
             function getMapLocation() {
                 navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true });
             }
@@ -113,7 +113,7 @@
 
                 Latitude = position.coords.latitude;
                 Longitude = position.coords.longitude;
-
+                //alert(Latitude+"//"+Longitude);
                 crear_mapa(Latitude, Longitude);
             }
 
@@ -121,18 +121,56 @@
                  alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
              }
 
-             function crear_mapa(latitude, longitude){
+            function crear_mapa(latitude, longitude){
                 var latLong = new google.maps.LatLng(latitude, longitude);
-
+                
                 var mapOptions = {
                     center: latLong,
-                    zoom: 2,
+                    zoom: 10,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
 
                 var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-             }
+            }
+*/
 
+
+app.initialize();
+var map, infoWindow;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {   
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 100
+        });
+        infoWindow = new google.maps.InfoWindow;
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Localizacion Encontrada');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
         </script>
 
 
@@ -167,7 +205,7 @@
 
             </select>
         </div>
-        <div id="map">
+        <div id="map" style="border: 1px solid black; width: 260px; height: 100px;">
 
         </div>
        

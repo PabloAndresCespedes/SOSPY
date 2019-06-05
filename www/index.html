@@ -104,35 +104,6 @@
                 alert("error =" + err.message);
             }
             
-            
-            function getMapLocation() {
-                navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true });
-            }
-
-            var onMapSuccess = function (position) {
-
-                Latitude = position.coords.latitude;
-                Longitude = position.coords.longitude;
-                alert(Latitude+"//"+Longitude);
-                //crear_mapa(Latitude, Longitude);
-            }
-
-            function onMapError(error) {
-                 alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
-             }
-
-            function crear_mapa(latitude, longitude){
-                var latLong = new google.maps.LatLng(latitude, longitude);
-
-                var mapOptions = {
-                    center: latLong,
-                    zoom: 2,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-
-                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-            }
-
         </script>
 
 
@@ -167,14 +138,11 @@
 
             </select>
         </div>
-        <div id="map">
-
-        </div>
-       
-            <button class="btn btn-danger siguiente" type="button" id="siguiente">
-                <a href="index2.html"></a>
-                <i class="fa fa-angle-right" aria-hidden="true"></i>
-            </button>
+        
+        <button class="btn btn-danger siguiente" type="button" id="siguiente">
+            <a href="index2.html"></a>
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </button>
 
         
         <script src="js/jquery-3.3.1.slim.min.js"></script>
