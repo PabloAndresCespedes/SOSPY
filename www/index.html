@@ -64,15 +64,12 @@
                             var fila = result.rows.item(i);
                             htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] +"</option>";                        
                         }
-                        $('#departamento').html(htmlContenidoDepartamentos);
-                                        
+                        $('#departamento').html(htmlContenidoDepartamentos);                                       
                     }
                     else{
                         console.log("no hay datos");
                     }
-
                 });
-
             } 
             /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
             function listarDependencias(tx){
@@ -148,8 +145,6 @@
         <script src="js/jquery-3.3.1.slim.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVzVmPXPh9s_GOBi-99gj4s6XObi6z3NM&callback=initMap" async defer></script>
-
     </body>
 </html>
 
