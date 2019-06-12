@@ -26,8 +26,7 @@
    
         <script type="text/javascript"></script>
 
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.css">
+
         <script>
           var db=null;
             document.addEventListener("deviceready", onDeviceReady, false);
@@ -36,12 +35,12 @@
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({name: "sospy.db", createFromLocation: 1});
                 /*COMPRUEBA QUE LA CONEXION SEA EXITOSA PARA EJECUTAR LA FUNCION*/
-                if(db!=null){
+                /*if(db!=null){
                     listarTodosDepartamentos();
                 }
                 else{
                     console.log("error al abrir bd");
-                }
+                }*/
             }
             /*FUNCION QUE RETORNA LOS DEPARTAMENTOS*/
             function listarTodosDepartamentos(){
@@ -54,31 +53,28 @@
             /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
             function listarDepartamentos(tx){
                 /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
-                tx.executeSql("select ID as 'ID', DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS",[],function(tx,result){
+                tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS",[],function(tx,result){
                     var nDepartamentos = result.rows.length;
                     var htmlContenidoDepartamentos = "";
                     
                     if(nDepartamentos > 0){
                         
-                        for(var i = 1; i < nDepartamentos; i++){
+                        for(var i = 0; i < nDepartamentos; i++){
                             var fila = result.rows.item(i);
                             htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] +"</option>";                        
                         }
-                        $('#departamento').html(htmlContenidoDepartamentos);
-                                        
+                        $('#departamento').html(htmlContenidoDepartamentos);                                       
                     }
                     else{
                         console.log("no hay datos");
                     }
-
                 });
-
             } 
             /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
             function listarDependencias(tx){
                 var v_id_com = $('#departamento').val();
                 /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
-                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+v_id_com , [],function(tx,result){
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+v_id_com+" AND ID_ENTIDAD = 1" , [],function(tx,result){
                     var nDependencias = result.rows.length;
                     var htmlContenidoDescripcion = "";
                     /*COMPRUEBA SI HAY DEPENDENCIAS EN ESE DEPARTAMENTO QUE TRAJO EL SELECT ANTERIOR*/
@@ -104,73 +100,6 @@
                 alert("error =" + err.message);
             }
             
-/*            
-            function getMapLocation() {
-                navigator.geolocation.getCurrentPosition(onMapSuccess, onMapError, { enableHighAccuracy: true });
-            }
-
-            var onMapSuccess = function (position) {
-
-                Latitude = position.coords.latitude;
-                Longitude = position.coords.longitude;
-                //alert(Latitude+"//"+Longitude);
-                crear_mapa(Latitude, Longitude);
-            }
-
-            function onMapError(error) {
-                 alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
-             }
-
-            function crear_mapa(latitude, longitude){
-                var latLong = new google.maps.LatLng(latitude, longitude);
-                
-                var mapOptions = {
-                    center: latLong,
-                    zoom: 10,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-
-                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-            }
-*/
-
-
-app.initialize();
-var map, infoWindow;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {   
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 100
-        });
-        infoWindow = new google.maps.InfoWindow;
-
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Localizacion Encontrada');
-            infoWindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
-      }
-
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-      }
         </script>
 
 
@@ -192,34 +121,29 @@ var map, infoWindow;
 
             <hr>
 
-            <h2>Seleccione su:</h2><br>
-            <select class="custom-select selectClass" id="departamento" onchange="listarTodasDependencias()">
-              <option selected>Departamento</option>
+            <h2>Seleccione su Preferencia:</h2><br>
+            <select class="custom-select selectClass" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarTodasDependencias()">
+                <option selected>Departamentos</option>
 
             </select>
 
             <br><br>
 
-            <select class="custom-select selectClass" id="dependencia" onchange="getMapLocation()">
-              <option selected >Dependencia Cercana</option>
+            <select class="custom-select selectClass" id="dependencia">
+                <option selected>Dependencia Cercana</option>
 
             </select>
         </div>
-        <div id="map" style="border: 1px solid black; width: 260px; height: 100px;">
-
-        </div>
-       
-            <button class="btn btn-danger siguiente" type="button" id="siguiente">
-                <a href="index2.html"></a>
-                <i class="fa fa-angle-right" aria-hidden="true"></i>
-            </button>
+        
+        <button class="btn btn-danger siguiente" type="button" id="siguiente">
+            <a href="index2.html"></a>
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </button>
 
         
         <script src="js/jquery-3.3.1.slim.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVzVmPXPh9s_GOBi-99gj4s6XObi6z3NM&callback=initMap" async defer></script>
-
     </body>
 </html>
 
