@@ -41,6 +41,10 @@
             function listarBomberos(){
                 db.transaction(listarBombero,error);
             }
+            /*FUNCION QUE INSERTA PREFERENCIAS*/
+            function insertarPreferencias(){
+                db.transaction(insertarPreferencia,error);
+            }
             /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
             function listarDepartamentos(tx){
                 /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
@@ -102,11 +106,19 @@
 
                 });
             }
+             /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
+             function insertarPreferencia(tx){
+                var dato1 = $('#comisaria').val();
+                
+                tx.executeSql("INSERT INTO PREFERENCIAS(ID_DEPENDENCIA) VALUES("+ dato1 +")" , [],function(tx,result){
+                    alert("Sus datos han sido insertados");          
+                });
+            }
             /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/ 
             function error(err){
                 alert("error =" + err.message);
             }
-            
+           
         </script>
 
 
