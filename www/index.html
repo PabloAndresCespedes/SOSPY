@@ -79,7 +79,6 @@
                     else{
                         alert("no hay datos");
                     }
-
                 });
             }
             /*FUNCION QUE RETORNA LOS BOMBEROS DE LA TABLA dependencias LA ENTIDAD ES 2*/
@@ -99,7 +98,6 @@
                     else{
                         alert("no hay datos");
                     }
-
                 });
             }
             /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/ 
@@ -127,22 +125,22 @@
 
             <hr>
 
-            <h5>Seleccione su Departamento:</h5>
-            <select class="custom-select selectClass" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarComisarias()">
+            <h3>Seleccione su Departamento:</h3><br>
+            <select class="sel custom-select" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarComisarias()">
                 <option selected>Departamentos</option>
             </select>
 
             <br><br>
 
-            <h5>Seleccione su Comisaría y su Compañía de Bomberos:</h5>
+            <h3>Seleccione su Comisaría y su Compañía de Bomberos:</h3><br>
 
-            <select class="custom-select selectClass" id="comisaria">
+            <select class="sel custom-select" id="comisaria">
                 <option selected>Comisaria cercana</option>
             </select>
 
             <br><br>
 
-            <select class="custom-select selectClass" id="bombero">
+            <select class="sel custom-select" id="bombero">
                 <option selected>Compañía de Bomberos cercana</option>
             </select>
         </div>
@@ -159,6 +157,5 @@
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
-
 
 
