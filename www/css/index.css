@@ -108,10 +108,11 @@ h2{
     margin-left: 7%;
 }
 h3{
-    font-size: 190%;
-    text-align: center;
+    font-size: 140%;
+    text-align: left;
+    margin-left: 5%;
     color: #000000;
-    font-family: monospace;
+    font-family: arial;
     font-weight: bold;
 }
 .sel{
