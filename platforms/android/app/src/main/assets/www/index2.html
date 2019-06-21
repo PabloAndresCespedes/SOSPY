@@ -18,6 +18,46 @@
 
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
         <title>SOS PY</title>
+        <script src="js/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script>
+            var db = null;  
+            var prf = null;
+            document.addEventListener("deviceready", onDeviceReady, false);
+            function onDeviceReady() {
+                
+                console.log("device is ready");
+                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+                
+                prf = preferenciasHacer();
+                
+
+            }
+            function preferenciasHacer(){
+                db.transaction(preferencias, error);
+            }
+            function preferencias(tx){
+                tx.executeSql("select ID, ID_DEPENDENCIA from PREFERENCIAS", [], function (tx, result) {
+                    var nDatos = result.rows.length;
+                    var html = "";
+                    if (nDatos > 0) {
+
+                        for (var i = 0; i < nDatos; i++) {
+                            var fila = result.rows.item(i);
+                            html += "<h1>" + fila['ID'] + ", " + fila['ID_DEPENDENCIA'] + "</h1><br>";
+                        }
+                        $('#datosPreferencias').html(html);
+                    }
+                    else {
+                        alert("no hay datos");
+                    }
+                });
+            }
+            
+            function error(err) {
+                alert("error =" + err.message);
+            }
+        </script>
     </head>
     <body>
        
@@ -35,6 +75,9 @@
         <div class="container-fluid" align="left">  
             <div class="boton">
                     <a href="#"><img src="img/police.png" class="ic"></a>   
+            </div>
+            <div id="datosPreferencias">
+
             </div>
         </div>
 

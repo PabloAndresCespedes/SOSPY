@@ -12,5 +12,13 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-call-number": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-call-number"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

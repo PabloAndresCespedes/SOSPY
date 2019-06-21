@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "sospy.sospy.db"
+    },
+    "cordova-plugin-call-number": {
+      "PACKAGE_NAME": "sospy.sospy.db"
     }
   },
   "dependent_plugins": {

@@ -12,6 +12,9 @@
     },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "fs.ejemplobd.bd"
+    },
+    "cordova-plugin-call-number": {
+      "PACKAGE_NAME": "sospy.sospy.db"
     }
   },
   "dependent_plugins": {},
@@ -23,10 +26,19 @@
       "clobbers": [
         "SQLitePlugin"
       ]
+    },
+    {
+      "file": "plugins/cordova-plugin-call-number/www/CallNumber.js",
+      "id": "cordova-plugin-call-number.CallNumber",
+      "pluginId": "cordova-plugin-call-number",
+      "clobbers": [
+        "call"
+      ]
     }
   ],
   "plugin_metadata": {
     "com.brodysoft.sqlitePlugin": "1.0.6",
-    "cordova-plugin-geolocation": "4.0.1"
+    "cordova-plugin-geolocation": "4.0.1",
+    "cordova-plugin-call-number": "1.0.1"
   }
 }

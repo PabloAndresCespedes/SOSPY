@@ -25,6 +25,14 @@
             {
               "xml": "<uses-feature android:name=\"android.hardware.location.gps\" />",
               "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.CALL_PHONE\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-feature android:name=\"android.hardware.telephony\" android:required=\"false\" />",
+              "count": 1
             }
           ]
         }
@@ -39,6 +47,10 @@
             {
               "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.Geolocation\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"CallNumber\"><param name=\"android-package\" value=\"mx.ferreyra.callnumber.CFCallNumber\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -50,6 +62,9 @@
       "PACKAGE_NAME": "fs.ejemplobd.bd"
     },
     "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "sospy.sospy.db"
+    },
+    "cordova-plugin-call-number": {
       "PACKAGE_NAME": "sospy.sospy.db"
     }
   },
@@ -76,10 +91,19 @@
       "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
       "pluginId": "cordova-plugin-geolocation",
       "runs": true
+    },
+    {
+      "id": "cordova-plugin-call-number.CallNumber",
+      "file": "plugins/cordova-plugin-call-number/www/CallNumber.js",
+      "pluginId": "cordova-plugin-call-number",
+      "clobbers": [
+        "call"
+      ]
     }
   ],
   "plugin_metadata": {
     "com.brodysoft.sqlitePlugin": "1.0.6",
-    "cordova-plugin-geolocation": "4.0.1"
+    "cordova-plugin-geolocation": "4.0.1",
+    "cordova-plugin-call-number": "1.0.1"
   }
 }

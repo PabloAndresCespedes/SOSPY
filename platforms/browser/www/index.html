@@ -16,87 +16,127 @@
         <link rel="stylesheet" type="text/css" href="css/all.css">
 
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
-        <!-- meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /-->
-       
+        
         <script src="js/jquery-2.1.3.min.js"></script>
-        <!--script type="text/javascript" src="cordova.js"></script-->
-   
-        <script type="text/javascript"></script>
-
-
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/pacr.js"></script>
         <script>
-          var db=null;
+            var db = null;
+            //var llama = null;
             document.addEventListener("deviceready", onDeviceReady, false);
             /*FUNCION POR DEFECTO DE CORDOVA UTILIZADA COMO ONLOAD, PARA CONECTAR A LA BASE DE DATOS*/
-            function onDeviceReady(){
+            function onDeviceReady() {
+                
                 console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({name: "sospy.db", createFromLocation: 1});
-                /*COMPRUEBA QUE LA CONEXION SEA EXITOSA PARA EJECUTAR LA FUNCION*/
-                /*if(db!=null){
-                    listarTodosDepartamentos();
-                }
-                else{
-                    console.log("error al abrir bd");
-                }*/
+                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+                //llama = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
+
+            }
+            /*FUNCION PARA VERIFICAR LLAMADA*/
+            function onSuccess(result) {
+                alert("Success:" + result);
+            }
+
+            /*FUNCION DE ERROR EN LA LLAMADA*/
+            function onError(result) {
+                alert("Error:" + result);
             }
             /*FUNCION QUE RETORNA LOS DEPARTAMENTOS*/
-            function listarTodosDepartamentos(){
-                db.transaction(listarDepartamentos,error);
+            function listarTodosDepartamentos() {
+                db.transaction(listarDepartamentos, error);
             }
-            /*FUNCION QUE RETORNA LAS DEPENDENCIAS*/
-            function listarTodasDependencias(){
-                db.transaction(listarDependencias,error);
+            /*FUNCION QUE RETORNA LAS COMISARIAS*/
+            function listarComisarias() {
+                db.transaction(listarComisaria, error);
+            }
+            /*FUNCION QUE RETORNA LOS BOMBEROS*/
+            function listarBomberos() {
+                db.transaction(listarBombero, error);
+            }
+            /*FUNCION QUE INSERTA PREFERENCIAS*/
+            function insertarPreferencias() {
+                db.transaction(insertarPreferencia, error);
             }
             /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
-            function listarDepartamentos(tx){
+            function listarDepartamentos(tx) {
                 /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
-                tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS",[],function(tx,result){
+                tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS", [], function (tx, result) {
                     var nDepartamentos = result.rows.length;
                     var htmlContenidoDepartamentos = "";
-                    
-                    if(nDepartamentos > 0){
-                        
-                        for(var i = 0; i < nDepartamentos; i++){
+
+                    if (nDepartamentos > 0) {
+
+                        for (var i = 0; i < nDepartamentos; i++) {
                             var fila = result.rows.item(i);
-                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] +"</option>";                        
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
                         }
-                        $('#departamento').html(htmlContenidoDepartamentos);                                       
+                        $('#departamento').html(htmlContenidoDepartamentos);
                     }
-                    else{
+                    else {
                         console.log("no hay datos");
                     }
                 });
-            } 
-            /*FUNCION QUE RETORNA LA LISTA COMPLETA DE DEPENDENCIAS DEL DEPARTAMENTO*/
-            function listarDependencias(tx){
+            }
+            /*FUNCION QUE RETORNA LAS COMISARIAS DE LA TABLA dependencias LA ENTIDAD ES 1*/
+            function listarComisaria(tx) {
                 var v_id_com = $('#departamento').val();
-                /*EJECUCION DE SELECT DENTRO DE LA TABLA DEPENDENCIA*/
-                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = "+v_id_com+" AND ID_ENTIDAD = 1" , [],function(tx,result){
-                    var nDependencias = result.rows.length;
-                    var htmlContenidoDescripcion = "";
-                    /*COMPRUEBA SI HAY DEPENDENCIAS EN ESE DEPARTAMENTO QUE TRAJO EL SELECT ANTERIOR*/
-                    if(nDependencias > 0){
-                        /*BUCLE QUE CAMPTURA LAS CONSULTAS Y LOS CONCATENA EN LA VARIABLE htmlContenidoDescripcion*/
-                        for(var i = 0; i < nDependencias; i++){
+
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_com + " AND ID_ENTIDAD = 1", [], function (tx, result) {
+                    var nBombero = result.rows.length;
+                    var htmlCC = "";
+                    if (nBombero > 0) {
+                        for (var i = 0; i < nBombero; i++) {
                             var fila = result.rows.item(i);
-                            htmlContenidoDescripcion += "<option value="+fila['ID']+">"+fila['DESCRIPCION']+"</option>";
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
                         }
-                        /*SE INSERTAN LOS DATOS DE LA VARIABLE htmlContenidoDescripcion EN EL TAG CON ID dependencia*/
-                        $('#dependencia').html(htmlContenidoDescripcion);
-                                        
+                        $('#comisaria').html(htmlCC);
+                        listarBomberos();
                     }
-                    else{
+                    else {
                         alert("no hay datos");
                     }
 
                 });
             }
+            /*FUNCION QUE RETORNA LOS BOMBEROS DE LA TABLA dependencias LA ENTIDAD ES 2*/
+            function listarBombero(tx) {
+                var v_id_com = $('#departamento').val();
 
-            /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/ 
-            function error(err){
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_com + " AND ID_ENTIDAD = 2", [], function (tx, result) {
+                    var nBombero = result.rows.length;
+                    var htmlCC = "";
+                    if (nBombero > 0) {
+                        for (var i = 0; i < nBombero; i++) {
+                            var fila = result.rows.item(i);
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        $('#bombero').html(htmlCC);
+                    }
+                    else {
+                        alert("no hay datos");
+                    }
+
+                });
+            }
+            /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
+            function insertarPreferencia(tx) {
+                var dato1 = $('#comisaria').val();
+                var id_actual = 0;
+                tx.executeSql("SELECT MAX(ID) PREFERENCIAS", [], function (tx, result) {
+                    id_actual = result.rows.item(0);
+                    if (id_actual == 0) {
+                        id_actual = 1;
+                    }
+                });
+                tx.executeSql("INSERT INTO PREFERENCIAS(ID, ID_DEPENDENCIA) VALUES(" + (parseInt(id_actual + 1)) + "," + parseInt(dato1) + ")", [], function (tx, result) {
+                    alert("Sus datos han sido guardados");
+                });
+            }
+            /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/
+            function error(err) {
                 alert("error =" + err.message);
             }
-            
+           
         </script>
 
 
@@ -118,7 +158,7 @@
             <hr>
 
             <h5>Seleccione su Departamento:</h5>
-            <select class="custom-select selectClass" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarTodasDependencias()">
+            <select class="custom-select selectClass" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarComisarias()">
                 <option selected>Departamentos</option>
             </select>
 
@@ -126,19 +166,19 @@
 
             <h5>Seleccione su Comisaría y su Compañía de Bomberos:</h5>
 
-            <select class="custom-select selectClass" id="ID_ENTIDAD">
+            <select class="custom-select selectClass" id="comisaria">
                 <option selected>Comisaria cercana</option>
             </select>
 
             <br><br>
 
-            <select class="custom-select selectClass" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarTodasDependencias()">
+            <select class="custom-select selectClass" id="bombero">
                 <option selected>Compañía de Bomberos cercana</option>
             </select>
         </div>
         
                
-        <button class="siguiente btn btn-danger" type="button">
+        <button class="siguiente btn btn-danger" type="button" onclick="insertarPreferencias()">
             <a href="index2.html"></a>
             <i class="fa fa-angle-right" aria-hidden="true"></i>
         </button>
