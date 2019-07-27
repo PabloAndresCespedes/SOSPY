@@ -41,12 +41,12 @@
                 db.transaction(BomberoCall, error);
             }
             function BomberoCall(tx){
-                tx.executeSql("select ID, ID_DEPENDENCIA from PREFERENCIAS where ", [], function (tx, result) {
+                tx.executeSql("select T.NUMERO AS 'NUMERO' from DEPENDENCIAS D inner join TELEFONOS T on(T.ID_DEPENDENCIAS = D.ID) where D.ID_ENTIDAD = 2", [], function (tx, result) {
                     var nDatos = result.rows.length;
-                    var html = "";
+                    
                     if (nDatos > 0) {
-
-                        llama = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
+                        var number = result.rows.item(0);
+                        llama = window.plugins.CallNumber.callNumber(onSuccess, onError, number['NUMERO'], true);
                     }
                     else {
                         alert("no hay datos");

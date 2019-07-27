@@ -119,15 +119,19 @@
             /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
             function insertarPreferencia(tx) {
                 var dato1 = $('#comisaria').val();
+                var lugar = null;
                 var id_actual = 0;
-                tx.executeSql("SELECT MAX(ID) AS 'ID' PREFERENCIAS", [], function (tx, result) {
-                    id_actual = result.rows.item(0);
+
+                tx.executeSql("SELECT MAX(ID) as 'ID' PREFERENCIAS", [], function (tx, result) {
+                    lugar = result.rows.item(0);
+                    id_actual = parseInt(lugar['ID']); 
                     if (id_actual == 0) {
                         id_actual = 1;
                     }
                 });
-                tx.executeSql("INSERT INTO PREFERENCIAS(ID, ID_DEPENDENCIA) VALUES(" + (parseInt(id_actual + 1)) + "," + parseInt(dato1) + ")", [], function (tx, result) {
-                    alert("Sus datos han sido guardados");
+
+                tx.executeSql("INSERT INTO PREFERENCIAS(ID, ID_DEPENDENCIA) VALUES(" + (parseInt(id_actual + 1)) + "," + parseInt(dato1) + ");", [], function (tx, result) {
+                        alert("Sus datos han sido guardados");
                 });
             }
             /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/
