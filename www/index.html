@@ -120,7 +120,7 @@
             function insertarPreferencia(tx) {
                 var dato1 = $('#comisaria').val();
                 var id_actual = 0;
-                tx.executeSql("SELECT MAX(ID) PREFERENCIAS", [], function (tx, result) {
+                tx.executeSql("SELECT MAX(ID) AS 'ID' PREFERENCIAS", [], function (tx, result) {
                     id_actual = result.rows.item(0);
                     if (id_actual == 0) {
                         id_actual = 1;
