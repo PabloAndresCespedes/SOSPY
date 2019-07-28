@@ -122,7 +122,7 @@
                 var lugar = null;
                 var id_actual = 0;
 
-                tx.executeSql("SELECT MAX(ID) AS 'ID' PREFERENCIAS", [], function (tx, result) {
+                tx.executeSql("SELECT MAX(ID) as 'ID' PREFERENCIAS", [], function (tx, result) {
                     lugar = result.rows.item(0);
                     id_actual = parseInt(lugar['ID']); 
                     if (id_actual == 0) {
