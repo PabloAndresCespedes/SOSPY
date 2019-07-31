@@ -18,6 +18,103 @@
 
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
         <title>SOS PY</title>
+        
+        <script src="js/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script>            
+            var llamar = null;
+
+            document.addEventListener("deviceready", onDeviceReady, false);
+            function onDeviceReady() {
+                
+                console.log("device is ready");
+                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+            }
+            /*FUNCION QUE RETORNA LOS DEPARTAMENTOS*/
+            function listarTodosDepartamentos() {
+                db.transaction(listarDepartamentos, error);
+            }
+            /*FUNCION QUE RETORNA LOS BOMBEROS*/
+            function listarBomberos() {
+                db.transaction(listarBombero, error);
+            }
+            /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
+            function listarDepartamentos(tx) {
+                /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
+                tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS", [], function (tx, result) {
+                    var nDepartamentos = result.rows.length;
+                    var htmlContenidoDepartamentos = "";
+
+                    if (nDepartamentos > 0) {
+
+                        for (var i = 0; i < nDepartamentos; i++) {
+                            var fila = result.rows.item(i);
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        $('#departamento').html(htmlContenidoDepartamentos);
+                    }
+                    else {
+                        console.log("no hay datos");
+                    }
+                });
+            }
+            /*FUNCION QUE RETORNA LAS COMISARIAS DE LA TABLA dependencias LA ENTIDAD ES 1*/
+            function listarComisaria(tx) {
+                var v_id_com = $('#departamento').val();
+
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_com + " AND ID_ENTIDAD = 1", [], function (tx, result) {
+                    var nBombero = result.rows.length;
+                    var htmlCC = "";
+                    if (nBombero > 0) {
+                        for (var i = 0; i < nBombero; i++) {
+                            var fila = result.rows.item(i);
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        $('#comisaria').html(htmlCC);
+                        listarBomberos();
+                    }
+                    else {
+                        alert("no hay datos");
+                    }
+                });
+            }
+            /*FUNCION QUE RETORNA LOS BOMBEROS DE LA TABLA dependencias LA ENTIDAD ES 2*/
+            function listarBombero(tx) {
+                var v_id_com = $('#departamento').val();
+
+                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_com + " AND ID_ENTIDAD = 2", [], function (tx, result) {
+                    var nBombero = result.rows.length;
+                    var htmlCC = "";
+                    if (nBombero > 0) {
+                        for (var i = 0; i < nBombero; i++) {
+                            var fila = result.rows.item(i);
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        $('#bombero').html(htmlCC);
+                    }
+                    else {
+                        alert("no hay datos");
+                    }
+                });
+            }
+            /*LLAMADA GRATUITA 132*/
+            function llamarBombero(){
+                db.transaction(BomberoCall, error);
+            }
+            function BomberoCall(){
+                llamar = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
+            }
+            function onSuccess(result) {
+                console.log("Success:" + result);
+            }
+            function onError(result) {
+                console.log("Error:" + result);
+            }            
+            function error(err) {
+                alert("error =" + err.message);
+            }        
+        </script>
+        
     </head>
     <body>
         
@@ -49,7 +146,7 @@
             <div class="container-fluid" align="right">
                 <button class="icon btn btn-default" type="button">
                     <a href="#"></a>
-                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <i class="fa fa-phone" aria-hidden="true" onclick="llamarBombero();"></i>
                 </button>
             </div>
         </div>
@@ -62,12 +159,12 @@
         </div>
     
         <div class="llamada">
-            <select class="contact custom-select">
-                   <option selected>Contacto de emergencia</option>
+            <select class="contact custom-select" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarBomberos()">
+                   <option selected>Departamento</option>
             </select>
             <br><br><br>
-            <select class="contact custom-select">
-                    <option selected>Contacto de emergencia</option>
+            <select class="contact custom-select" id="bombero">
+                    <option selected>CIA de Bomberos cercana</option>
             </select>
             <br><br><br>
             <h2>

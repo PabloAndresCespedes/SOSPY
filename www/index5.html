@@ -29,8 +29,29 @@
                 
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
-                //llama = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
+            }
 
+            function guardarContactos(numero){
+                var numero = this.numero;
+                db.transaction(guardarContacto(numero), error);
+            }
+
+            function listarContactos(){
+                navigator.contacts.pickContact(function(contact){
+                    var Obj = JSON.stringify(contact);
+                    var myObj = JSON.parse(Obj);
+                    var name  = myObj.displayName;
+                    var number = myObj.phoneNumbers[0].value;
+
+                    if(number != null){
+                        function guardarContacto(tx, numero){
+                            var numero = this.numero;
+                            function guardarSQL(tx){}
+                        }
+                    }
+                },function(err){
+                    alert('Error: ' + err);
+                });
             }
 
             function onSuccess(contacts) {
@@ -41,14 +62,9 @@
                 alert('onError!');
             };
 
-            // find all contacts with 'Bob' in any name field
-            var options      = new ContactFindOptions();
-            options.filter   = "*";
-            options.multiple = true;
-            options.desiredFields = [navigator.contacts.fieldType.id];
-            options.hasPhoneNumber = true;
-            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            navigator.contacts.find(fields, onSuccess, onError, options);
+            function error(err) {
+                alert("error =" + err.message);
+            }
         </script>
         <title>SOS PY</title>
     </head>
@@ -97,15 +113,15 @@
         </div>
               
         <div class="llamada">
-            <select class="contact custom-select" id="contacto_1" onclick="listarContactos();" onchange="guardarContacto();">
+            <select class="contact custom-select" id="1" onclick="listarContactos();" onchange="guardarContactos(1);">
                 <option selected>Contacto de emergencia 1</option>
             </select>
             <br><br><br>
-            <select class="contact custom-select" id="contacto_2" onclick="listarContactos();" onchange="guardarContacto();">
+            <select class="contact custom-select" id="c2" onclick="listarContactos();" onchange="guardarContactos(2);">
                 <option selected>Contacto de emergencia 2</option>
             </select>
             <br><br><br>
-            <select class="contact custom-select" id="contacto_3" onclick="listarContactos();" onchange="guardarContacto();">
+            <select class="contact custom-select" id="3" onclick="listarContactos();" onchange="guardarContactos(3);">
                 <option selected>Contacto de emergencia 3</option> 
             </select>
         </div>
