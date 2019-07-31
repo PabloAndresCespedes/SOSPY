@@ -70,6 +70,7 @@
                         for (var i = 0; i < nBombero; i++) {
                             var fila = result.rows.item(i);
                             htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            alert("Sus datos han sido actualizados");
                         }
                         $('#comisaria').html(htmlCC);
                     }
@@ -94,6 +95,21 @@
             function error(err) {
                 alert("error =" + err.message);
             }
+
+            //FUNCION PARA CERRAR
+            document.addEventListener('deviceready',function(){
+            document.addEventListener('backbutton',function(e){
+                console.log("history is "+ history.length);
+                if(history.length==0){
+                    e.preventDefault();
+                    navigator.app.exitApp();
+                }
+                else{
+                    window.location.href="index2.html";
+                }
+                },false);
+            },false);
+
         </script>
         
     </head>
