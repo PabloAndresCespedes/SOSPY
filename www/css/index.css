@@ -123,5 +123,40 @@ h3{
 select{
     color: #000000;
 }
+table {
+        border-collapse: collapse;
+        width: 80%;
+        margin-left: 10%;
+      }
 
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.listaContactos{
+  width: 80%;
+  border: 1px solid black;
+}
+.rojo{
+  color:red;
+}
+.verde{
+  color: green;
+}
+.button_container{
+  float: right;
+  padding-right: 10%;
+}
+.add_button{
+
+  border-radius: 20px;
+  padding: 2px 6px 5px 6px;
+  background-color: white;
+  box-shadow: 0 5px #999;
+}
+.add_button:active{
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
 

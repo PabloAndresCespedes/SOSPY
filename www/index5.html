@@ -29,26 +29,50 @@
                 
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+                vistaContactos();
             }
 
-            function guardarContactos(numero){
-                var numero = this.numero;
-                db.transaction(guardarContacto(numero), error);
+            function guardarContactos(){
+            	db.transaction(listarContactos, error);
             }
 
-            function listarContactos(){
+            function vistaContactos(tx){
+            	
+            	tx.executeSql("SELECT ID,NUMERO_EMERGENCIA, NOMBRE FROM CONTACTOS",[],function(tx, result){
+            		var html = "";
+            		var filasN = result.rows.length;
+            		if(filasN > 0){
+            			for (var i = 0; i < nDepartamentos; i++) {
+                            var fila = result.rows.item(i);
+                            html += "<td id="+ID+">"+fila['NOMBRE']+"</td>";
+                        }
+                       $(".tabla_contactos").append(html);
+                    }
+                    else {
+                        console.log("no hay datos");
+                    }
+            	});           	
+            }
+
+            function listarContactos(tx){
                 navigator.contacts.pickContact(function(contact){
                     var Obj = JSON.stringify(contact);
                     var myObj = JSON.parse(Obj);
                     var name  = myObj.displayName;
                     var number = myObj.phoneNumbers[0].value;
 
-                    if(number != null){
-                        function guardarContacto(tx, numero){
-                            var numero = this.numero;
-                            function guardarSQL(tx){}
-                        }
-                    }
+                    tx.executeSql("SELECT COUNT(*) as 'ID' CONTACTOS", [], function (tx, result) {
+                    lugar = result.rows.item(0);
+                    id_actual = parseInt(lugar['ID']); 
+	                    if ((id_actual == 0 || id_actual == null) && id_actual <= 3) {
+	                        id_actual = 1;
+	                    }else{
+	                    	$(".add_button").hide();
+	                    }
+	                });
+                    tx.executeSql("INSERT INTO CONTACTOS(ID, NUMERO_EMERGENCIA, NOMBRE) VALUES(" + (parseInt(id_actual + 1)) + "," + number + ","+ name +");", [], function (tx, result) {
+                        alert("Sus datos han sido guardados");
+               		 });
                 },function(err){
                     alert('Error: ' + err);
                 });
@@ -81,9 +105,21 @@
         </div>
 
         <div class="icono">
+            <!--<div class="container-fluid" align="right">              
+                <a class="icon btn btn-default">
+                	<i class="fa fa-phone" aria-hidden="true"></i>
+                </a> <br>
+                <a class="icon btn btn-default">
+                	<i class="fa fa-phone" aria-hidden="true"></i>
+                </a> <br>
+                <a class="icon btn btn-default">
+                	<i class="fa fa-phone" aria-hidden="true"></i>
+                </a>                  
+            </div>
+
             <div class="container-fluid" align="right">
-                <button class="icon btn btn-default" type="button">
-                    <a href="#"></a>
+                <button  type="button">
+                    <a class="icon btn btn-default"></a>
                     <i class="fa fa-phone" aria-hidden="true"></i>
                 </button>
             </div>
@@ -94,14 +130,7 @@
                     <i class="fa fa-phone" aria-hidden="true"></i>
                 </button>
             </div>
-
-            <div class="container-fluid" align="right">
-                <button class="icon btn btn-default" type="button">
-                    <a href="#"></a>
-                    <i class="fa fa-phone" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
+        </div>-->
            
         
         
@@ -112,20 +141,38 @@
           <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
         </div>
               
-        <div class="llamada">
-            <select class="contact custom-select" id="1" onclick="listarContactos();" onchange="guardarContactos(1);">
+       <!-- <div class="llamada">
+            <select class="contact custom-select" id="1" onclick="listarContactos();" onchange="guardarContactos();">
                 <option selected>Contacto de emergencia 1</option>
             </select>
             <br><br><br>
-            <select class="contact custom-select" id="c2" onclick="listarContactos();" onchange="guardarContactos(2);">
+            <select class="contact custom-select" id="c2" onclick="listarContactos();" onchange="guardarContactos();">
                 <option selected>Contacto de emergencia 2</option>
             </select>
             <br><br><br>
-            <select class="contact custom-select" id="3" onclick="listarContactos();" onchange="guardarContactos(3);">
+            <select class="contact custom-select" id="3" onclick="listarContactos();" onchange="guardarContactos();">
                 <option selected>Contacto de emergencia 3</option> 
             </select>
+        </div>-->
+        <div class="button_container">
+        	<button class="add_button" onclick="guardarContactos();">Agregar</button>
         </div>
-        
+        <div id="listaContactos">
+        	<table id="tabla_contactos">
+			  <tr>
+			    <th>Nombre</th>
+			    <th>Número</th>
+			    <th>&nbsp</th>
+			    <th>&nbsp</th>			    
+			  </tr>
+			  <tr>
+			    <td id="nombre_1">Pepe</td>
+			    <td id="numero_1">123</td>
+			    <td><i class="fa fa-phone fa-lg verde" aria-hidden="true"></i></td>
+			    <td><i class="fa fa-trash-o fa-lg rojo" aria-hidden="true"></i></td>
+			  </tr>
+			</table>
+        </div>
         
         <script src="js/jquery-3.3.1.slim.min.js"></script>
         <script src="js/popper.min.js"></script>
