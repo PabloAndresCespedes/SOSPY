@@ -55,27 +55,50 @@
             }
 
             function listarContactos(tx){
+            	var id_actual = ""; 
+            	var number = 0;
+            	var name = "";
+
                 navigator.contacts.pickContact(function(contact){
                     var Obj = JSON.stringify(contact);
                     var myObj = JSON.parse(Obj);
                     var name  = myObj.displayName;
                     var number = myObj.phoneNumbers[0].value;
+                    //alert(Obj);
 
-                    tx.executeSql("SELECT COUNT(*) as 'ID' CONTACTOS", [], function (tx, result) {
-                    lugar = result.rows.item(0);
-                    id_actual = parseInt(lugar['ID']); 
-	                    if ((id_actual == 0 || id_actual == null) && id_actual <= 3) {
-	                        id_actual = 1;
-	                    }else{
-	                    	$(".add_button").hide();
-	                    }
-	                });
-                    tx.executeSql("INSERT INTO CONTACTOS(ID, NUMERO_EMERGENCIA, NOMBRE) VALUES(" + (parseInt(id_actual + 1)) + "," + number + ","+ name +");", [], function (tx, result) {
-                        alert("Sus datos han sido guardados");
-               		 });
                 },function(err){
                     alert('Error: ' + err);
                 });
+
+                tx.executeSql("select count(ID) as 'CONT' from CONTACTOS", [], function (tx, result) {
+                    var lugar = result.rows.item(0);
+                    
+                    	id_actual = parseInt(lugar['CONT']);
+
+	                    if (id_actual <= 0 || id_actual == null) {
+	                        id_actual = 1;	                        
+	                    }
+	                    else{
+	                    	alert("Error hay acá");
+	                    }
+                });
+
+                tx.executeSql("INSERT INTO CONTACTOS(ID, NUMERO_EMERGENCIA, NOMBRE) VALUES(" + (parseInt(id_actual + 1)) + "," + number + ","+ name +");", [], function (tx, result) {
+                		alert("Sus datos han sido guardados");                     
+           		});
+
+                 tx.executeSql("SELECT ID, NUMERO_EMERGENCIA, NOMBRE FROM CONTACTOS;", [], function (tx, result) {
+                	var nContacts = result.rows.length;
+                	var html = "";
+                	if (nContacts > 0) {
+                		for (var i = 0; i < nContacts; i++) {
+                            var fila = result.rows.item(i);
+                            html += "<tr><td id='nombre_1'>"+fila['NOMBRE']+"</td><td id="+fila['ID']+">"+fila['NUMERO_EMERGENCIA']+"</td><td><i class='fa fa-phone fa-lg verde' aria-hidden='true'></i></td><td><i class='fa fa-trash-o fa-lg rojo' aria-hidden='true'></i></td></tr>";
+                    	}
+                    	$('#tabla_contactos').html(html);	
+                	}
+                    alert("Sus datos han sido guardados");
+           		 });
             }
 
             function onSuccess(contacts) {
