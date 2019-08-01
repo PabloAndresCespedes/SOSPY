@@ -83,6 +83,36 @@
             function error(err) {
                 alert("error =" + err.message);
             }
+
+            //FUNCION PARA CERRAR
+            var pageHistory = [];
+
+            $(document).on("deviceready", onDeviceReady);
+
+
+            function onDeviceReady(){
+                $(document).on("pagecontainerload", onPageLoad);
+                $(document).on("backbutton", onBackButton);
+            }
+
+            function onBackButton(e){
+                e.preventDefault();
+                pageHistory.pop();
+                if(pageHistory.length==0){
+                    navigator.app.exitApp();
+                }
+                else{
+                    navigator.app.backHistory();
+                }
+            }
+
+            function onPageLoad(e, ui){
+                var pageId = ui.toPage.attr('id');
+                if(pageId !== pageHistory[pageHistory.length]){
+                    pageHistory.push(pageId);
+                }    
+            }
+            
         </script>
     </head>
     <body>

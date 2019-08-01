@@ -17,6 +17,7 @@
 
 
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
+        <title>SOS PY</title>
         <script type="text/javascript" src="cordova.js"></script>
         <script src="js/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="js/pacr.js"></script>
@@ -111,9 +112,21 @@
 
             function error(err) {
                 alert("error =" + err.message);
-            }
+            } 
+        
+            //FUNCION PARA CERRAR
+            document.addEventListener('backbutton',function(e){
+                console.log("history is "+ history.length);
+                if(history.length==0){
+                    navigator.app.exitApp();
+                }
+                else{
+                    window.location.href="index2.html";
+                }
+                },false);
+
         </script>
-        <title>SOS PY</title>
+        
     </head>
     <body>
        
