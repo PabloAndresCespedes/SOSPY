@@ -119,7 +119,7 @@
             /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
             function insertarPreferencia(tx) {
                 var dato1 = $('#comisaria').val();
-                var lugar = null;
+                var lugar = 0;
                 var id_actual = 0;
 
                 tx.executeSql("SELECT MAX(ID) as 'ID' PREFERENCIAS", [], function (tx, result) {

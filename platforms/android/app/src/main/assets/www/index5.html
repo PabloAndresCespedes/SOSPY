@@ -17,6 +17,7 @@
 
 
         <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
+        <title>SOS PY</title>
         <script type="text/javascript" src="cordova.js"></script>
         <script src="js/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="js/pacr.js"></script>
@@ -29,76 +30,63 @@
                 
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
-                vistaContactos();
+                ver();
             }
 
             function guardarContactos(){
-            	db.transaction(listarContactos, error);
+            	db.transaction(listarGuardarContacto, error);
             }
-
+            function ver(){
+                db.transaction(vistaContactos,error);
+            }
             function vistaContactos(tx){
             	
-            	tx.executeSql("SELECT ID,NUMERO_EMERGENCIA, NOMBRE FROM CONTACTOS",[],function(tx, result){
+            	tx.executeSql("SELECT ID, NUMERO_EMERGENCIA, NOMBRE FROM CONTACTOS",[],function(tx, result){
             		var html = "";
             		var filasN = result.rows.length;
             		if(filasN > 0){
-            			for (var i = 0; i < nDepartamentos; i++) {
+            			for (var i = 0; i < filasN; i++) {
                             var fila = result.rows.item(i);
-                            html += "<td id="+ID+">"+fila['NOMBRE']+"</td>";
+                            html += "<tr><td id='nombre_1'>"+fila['NOMBRE']+"</td><td id="+fila['ID']+">"+fila['NUMERO_EMERGENCIA']+"</td><td><i class='fa fa-phone fa-lg verde' aria-hidden='true'></i></td><td><i class='fa fa-trash-o fa-lg rojo' aria-hidden='true'></i></td></tr>";
+                            alert(html);
                         }
-                       $(".tabla_contactos").append(html);
+                       $(".tabla_contactos").html(html);
                     }
                     else {
-                        console.log("no hay datos");
+                        alert("no hay datos");
                     }
             	});           	
             }
 
-            function listarContactos(tx){
-            	var id_actual = ""; 
-            	var number = 0;
-            	var name = "";
+            function listarGuardarContacto(tx){
+            	var id_actual = 0; 
+            	var number;
+            	var name;
 
                 navigator.contacts.pickContact(function(contact){
                     var Obj = JSON.stringify(contact);
                     var myObj = JSON.parse(Obj);
-                    var name  = myObj.displayName;
-                    var number = myObj.phoneNumbers[0].value;
-                    //alert(Obj);
+                    name  = myObj.displayName;
+                    number = myObj.phoneNumbers[0].value;
 
                 },function(err){
                     alert('Error: ' + err);
-                });
+                }); 
 
-                tx.executeSql("select count(ID) as 'CONT' FROM CONTACTOS", [], function (tx, result) {
-                    var lugar = result.rows.item(0);
+                tx.executeSql("select count(ID) as 'ID' from CONTACTOS", [], function (tx, result) {
+                    var fila = result.rows.item(0);
                     
-                    	id_actual = parseInt(lugar['CONT']);
+                        id_actual = parseInt(fila['ID']);
 
-	                    if (id_actual <= 0 || id_actual == null) {
-	                        id_actual = 1;	                        
-	                    }
-	                    else{
-	                    	alert("Error hay acá");
-	                    }
-                });
+                        if (id_actual = 0) {
+                            id_actual = 1;  
+                            alert(id_actual);                        
+                        }
+                    });
 
-                tx.executeSql("INSERT INTO CONTACTOS(ID, NUMERO_EMERGENCIA, NOMBRE) VALUES(" + (parseInt(id_actual + 1)) + "," + number + ","+ name +");", [], function (tx, result) {
-                		alert("Sus datos han sido guardados");                     
-           		});
-
-                 tx.executeSql("SELECT ID, NUMERO_EMERGENCIA, NOMBRE FROM CONTACTOS;", [], function (tx, result) {
-                	var nContacts = result.rows.length;
-                	var html = "";
-                	if (nContacts > 0) {
-                		for (var i = 0; i < nContacts; i++) {
-                            var fila = result.rows.item(i);
-                            html += "<tr><td id='nombre_1'>"+fila['NOMBRE']+"</td><td id="+fila['ID']+">"+fila['NUMERO_EMERGENCIA']+"</td><td><i class='fa fa-phone fa-lg verde' aria-hidden='true'></i></td><td><i class='fa fa-trash-o fa-lg rojo' aria-hidden='true'></i></td></tr>";
-                    	}
-                    	$('#tabla_contactos').html(html);	
-                	}
-                    alert("Sus datos han sido guardados");
-           		 });
+                    tx.executeSql("insert into CONTACTOS(ID, NUMERO_EMERGENCIA, NOMBRE) values("+(id_actual+=1)+"," +"'"+ number +"'"+ ","+"'" +name +"'"+");", [], function (tx, result) {
+                            alert("Sus datos han sido guardados");                     
+                    });               
             }
 
             function onSuccess(contacts) {
@@ -111,9 +99,21 @@
 
             function error(err) {
                 alert("error =" + err.message);
-            }
+            } 
+        
+            //FUNCION PARA CERRAR
+            document.addEventListener('backbutton',function(e){
+                console.log("history is "+ history.length);
+                if(history.length==0){
+                    navigator.app.exitApp();
+                }
+                else{
+                    window.location.href="index2.html";
+                }
+                },false);
+
         </script>
-        <title>SOS PY</title>
+        
     </head>
     <body>
        
