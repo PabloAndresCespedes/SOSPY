@@ -21,55 +21,18 @@
         <script src="js/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script>
+            var pageHistory = [];
             var db = null;  
-            //var prf = null;
-            //variable para la función llamarPreferencia
-            var llamar = null;
+            var llama = null;
 
             document.addEventListener("deviceready", onDeviceReady, false);
             function onDeviceReady() {
-                
+                $(document).on("pagecontainerload", onPageLoad);
+                $(document).on("backbutton", onBackButton);
                 console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });      
+
                 
-                //prf = preferenciasHacer();
-                
-
-            }
-
-            function llamarBombero(){
-                db.transaction(BomberoCall, error);
-            }
-
-            function llamarPolicia(){
-                db.transaction(PoliceCall, error);
-            }
-
-            function BomberoCall(tx){
-                tx.executeSql("select T.NUMERO as 'NUMERO_BOMBERO' from DEPENDENCIAS D inner join TELEFONOS T on(T.ID_DEPENDENCIAS = D.ID) where D.ID_ENTIDAD = 2", [], function (tx, result) {
-                    var nDatos = result.rows.length;
-                    
-                    if (nDatos > 0) {
-                        var number = result.rows.item(0);
-                        llama = window.plugins.CallNumber.callNumber(onSuccess, onError, number['NUMERO_BOMBERO'], true);
-                    }
-                    else {
-                        alert("no hay datos bomberos");
-                    }
-                });
-            }
-            function PoliceCall(tx){
-                tx.executeSql("select T.NUMERO as 'NUMERO_POLICIA' from DEPENDENCIAS D inner join TELEFONOS T on(T.ID_DEPENDENCIAS = D.ID) where D.ID_ENTIDAD = 1", [], function (tx, result) {
-                    var nDatos = result.rows.length;
-                    
-                    if (nDatos > 0) {
-                        var number = result.rows.item(0);
-                        llama = window.plugins.CallNumber.callNumber(onSuccess, onError, number['NUMERO_POLICIA'], true);
-                    }
-                    else {
-                        alert("no hay datos policía");
-                    }
-                });
             }
             function onSuccess(result) {
                 console.log("Success:" + result);
@@ -83,6 +46,28 @@
             function error(err) {
                 alert("error =" + err.message);
             }
+
+            //FUNCION PARA CERRAR
+            $(document).on("deviceready", onDeviceReady);
+
+            function onBackButton(e){
+                e.preventDefault();
+                pageHistory.pop();
+                if(pageHistory.length==0){
+                    navigator.app.exitApp();
+                }
+                else{
+                    navigator.app.backHistory();
+                }
+            }
+
+            function onPageLoad(e, ui){
+                var pageId = ui.toPage.attr('id');
+                if(pageId !== pageHistory[pageHistory.length]){
+                    pageHistory.push(pageId);
+                }    
+            }
+            
         </script>
     </head>
     <body>
@@ -99,8 +84,8 @@
         </div>
 
         <div class="container-fluid" align="left">  
-            <div class="boton">
-                    <a href="#"><img src="img/police.png" class="ic" onclick="llamarPolicia();"></a>   
+            <div class="boton" onclick="llamarPolicia();">
+                    <a href="#"><img src="img/police.png" class="ic" ></a>   
             </div>
             <div id="datosPreferencias">
 

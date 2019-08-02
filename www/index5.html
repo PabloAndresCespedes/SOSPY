@@ -94,7 +94,7 @@
                     if(name != null || number != undefined){
                         db.executeSql("SELECT MAX((ID)+1) AS maximo FROM CONTACTOS", [], function (resultSet) {
                           var dato = resultSet.rows.item(0).maximo;
-                              db.executeSql('INSERT INTO CONTACTOS VALUES (?,?,?)', [dato,number,name], function (resultSet) {
+                            db.executeSql('INSERT INTO CONTACTOS VALUES (?,?,?)', [dato,number,name], function (resultSet) {
                                 alert('Contacto agendado');
                                 actualizarLista();
                             }, function(error) {

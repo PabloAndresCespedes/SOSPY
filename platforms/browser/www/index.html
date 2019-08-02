@@ -117,21 +117,34 @@
                 });
             }
             /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
-            function insertarPreferencia(tx) {
-                var dato1 = $('#comisaria').val();
-                var lugar = null;
-                var id_actual = 0;
+            function insertarPreferencia(tx){
+                var dep_id_com  = $('#comisaria').val();
 
-                tx.executeSql("SELECT MAX(ID) as 'ID' PREFERENCIAS", [], function (tx, result) {
-                    lugar = result.rows.item(0);
-                    id_actual = parseInt(lugar['ID']); 
-                    if (id_actual == 0) {
-                        id_actual = 1;
-                    }
+                db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
+                    var dato = resultSet.rows.item(0).maximo;
+                        db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_com], function (resultSet) {
+                            alert('Preferencia Comisaria guardada');
+                            insertarPreferencia2();
+                        }, function(error) {
+                          alert('Tiene un error de: ' + error.message);
+                    });
+                }, function(error) {
+                  alert('error: ' + error.message);
                 });
+            }
 
-                tx.executeSql("INSERT INTO PREFERENCIAS(ID, ID_DEPENDENCIA) VALUES(" + (parseInt(id_actual + 1)) + "," + parseInt(dato1) + ");", [], function (tx, result) {
-                        alert("Sus datos han sido guardados");
+            function insertarPreferencia2(){
+                var dep_id_bomb = $('#bombero').val();
+                db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
+                    var dato = resultSet.rows.item(0).maximo;
+                        db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_bomb], function (resultSet) {
+                            alert('Preferencia Bomberos guardada');
+                            $(location).attr('href','index2.html');
+                        }, function(error) {
+                          alert('Tiene un error de: ' + error.message);
+                    });
+                }, function(error) {
+                  alert('error: ' + error.message);
                 });
             }
             /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/
@@ -160,7 +173,7 @@
             <hr>
 
             <h3>Seleccione su Departamento:</h3><br>
-            <select class="sel custom-select" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarComisarias()">
+            <select class="sel custom-select" id="departamento" onclick="listarTodosDepartamentos();" onchange="listarComisarias();">
                 <option selected>Departamentos</option>
             </select>
 
@@ -180,8 +193,8 @@
         </div>
         
                
-        <button class="siguiente btn btn-danger" type="button" onclick="insertarPreferencias()">
-            <a href="index2.html"></a>
+        <button class="siguiente btn btn-danger" type="button" onclick="insertarPreferencias();">
+            <!--<a href="index2.html"></a>-->
             <i class="fa fa-angle-right" aria-hidden="true"></i>
         </button>
 
