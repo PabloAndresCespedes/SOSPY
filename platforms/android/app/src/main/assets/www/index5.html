@@ -23,7 +23,7 @@
         <script type="text/javascript" src="js/pacr.js"></script>
         <script>
             var db = null;
-            //var llama = null;
+            var llama = null;
             document.addEventListener("deviceready", onDeviceReady, false);
             /*FUNCION POR DEFECTO DE CORDOVA UTILIZADA COMO ONLOAD, PARA CONECTAR A LA BASE DE DATOS*/
             function onDeviceReady() {
@@ -34,63 +34,87 @@
             }
 
             function guardarContactos(){
-            	db.transaction(listarGuardarContacto, error);
+            	db.transaction(listarContacto, error);
             }
             function ver(){
                 db.transaction(vistaContactos,error);
             }
             function vistaContactos(tx){
             	
-            	tx.executeSql("SELECT ID, NUMERO_EMERGENCIA, NOMBRE FROM CONTACTOS",[],function(tx, result){
+            	tx.executeSql("SELECT NOMBRE, NUMERO_EMERGENCIA, ID FROM CONTACTOS",[],function(tx, result){
             		var html = "";
             		var filasN = result.rows.length;
+                    
             		if(filasN > 0){
             			for (var i = 0; i < filasN; i++) {
                             var fila = result.rows.item(i);
-                            html += "<tr><td id='nombre_1'>"+fila['NOMBRE']+"</td><td id="+fila['ID']+">"+fila['NUMERO_EMERGENCIA']+"</td><td><i class='fa fa-phone fa-lg verde' aria-hidden='true'></i></td><td><i class='fa fa-trash-o fa-lg rojo' aria-hidden='true'></i></td></tr>";
-                            alert(html);
+                            html += '<tr><td id="nombre_1">'+fila['NOMBRE']+'</td><td id="numero_1">'+fila['NUMERO_EMERGENCIA']+'</td> <td><i class="fa fa-phone fa-lg verde" aria-hidden="true" onclick="llamaContacto('+fila['ID']+');"></i></td> <td><i class="fa fa-trash-o fa-lg rojo" aria-hidden="true" onclick="eliminarContacto(parseInt('+fila['ID']+'));"></i></td> </tr>';
                         }
-                       $(".tabla_contactos").html(html);
+                       $("#tabla_contactos").append(html);
                     }
                     else {
-                        alert("no hay datos");
+                        console.log("No hay números agendados, por favor seleccione");
                     }
             	});           	
             }
 
-            function listarGuardarContacto(tx){
+            function llamaContacto(id){
+                
+                db.executeSql("SELECT NUMERO_EMERGENCIA AS numero FROM CONTACTOS WHERE ID = ?", [id], function (resultSet) {
+                    var numero = resultSet.rows.item(0).numero;  
+                    llama = window.plugins.CallNumber.callNumber(onSuccess, onError, numero, true);
+                    //alert(numero);                         
+                }, function(error) {
+                  alert('error: ' + error.message);
+                });
+            }
+
+            function eliminarContacto(id){
+                db.executeSql("DELETE FROM CONTACTOS WHERE ID = ?", [id], function (resultSet) {
+                         alert('Contacto eliminado'); 
+                         actualizarLista();
+                }, function(error) {
+                  alert('error: ' + error.message);
+                });
+            }
+
+            function listarContacto(){
             	var id_actual = 0; 
-            	var number;
-            	var name;
+            	var number = "";
+            	var name = "";
 
                 navigator.contacts.pickContact(function(contact){
                     var Obj = JSON.stringify(contact);
                     var myObj = JSON.parse(Obj);
                     name  = myObj.displayName;
                     number = myObj.phoneNumbers[0].value;
+                    if(name != null || number != undefined){
+                        db.executeSql("SELECT MAX((ID)+1) AS maximo FROM CONTACTOS", [], function (resultSet) {
+                          var dato = resultSet.rows.item(0).maximo;
+                              db.executeSql('INSERT INTO CONTACTOS VALUES (?,?,?)', [dato,number,name], function (resultSet) {
+                                alert('Contacto agendado');
+                                actualizarLista();
+                            }, function(error) {
+                              alert('Tiene un error de: ' + error.message);
+                            });
+                        }, function(error) {
+                          alert('error: ' + error.message);
+                        });
+                    }else{
+                        alert('Error en numero o nombre');
+                    }
 
                 },function(err){
                     alert('Error: ' + err);
-                }); 
+                });             
+            }
 
-                tx.executeSql("select count(ID) as 'ID' from CONTACTOS", [], function (tx, result) {
-                    var fila = result.rows.item(0);
-                    
-                        id_actual = parseInt(fila['ID']);
-
-                        if (id_actual = 0) {
-                            id_actual = 1;  
-                            alert(id_actual);                        
-                        }
-                    });
-
-                    tx.executeSql("insert into CONTACTOS(ID, NUMERO_EMERGENCIA, NOMBRE) values("+(id_actual+=1)+"," +"'"+ number +"'"+ ","+"'" +name +"'"+");", [], function (tx, result) {
-                            alert("Sus datos han sido guardados");                     
-                    });               
+            function actualizarLista(){
+                location.reload(true);
             }
 
             function onSuccess(contacts) {
-                alert('Found ' + contacts.length + ' contacts.');
+                console.log('Found ' + contacts.length + ' contacts.');
             };
 
             function onError(contactError) {
@@ -128,71 +152,23 @@
         </div>
 
         <div class="icono">
-            <!--<div class="container-fluid" align="right">              
-                <a class="icon btn btn-default">
-                	<i class="fa fa-phone" aria-hidden="true"></i>
-                </a> <br>
-                <a class="icon btn btn-default">
-                	<i class="fa fa-phone" aria-hidden="true"></i>
-                </a> <br>
-                <a class="icon btn btn-default">
-                	<i class="fa fa-phone" aria-hidden="true"></i>
-                </a>                  
-            </div>
-
-            <div class="container-fluid" align="right">
-                <button  type="button">
-                    <a class="icon btn btn-default"></a>
-                    <i class="fa fa-phone" aria-hidden="true"></i>
-                </button>
-            </div>
-
-            <div class="container-fluid" align="right">
-                <button class="icon btn btn-default" type="button">
-                    <a href="#"></a>
-                    <i class="fa fa-phone" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>-->
-           
-        
-        
+    
         <div class="navbar">
           <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a> 
           <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>  
           <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
           <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
         </div>
-              
-       <!-- <div class="llamada">
-            <select class="contact custom-select" id="1" onclick="listarContactos();" onchange="guardarContactos();">
-                <option selected>Contacto de emergencia 1</option>
-            </select>
-            <br><br><br>
-            <select class="contact custom-select" id="c2" onclick="listarContactos();" onchange="guardarContactos();">
-                <option selected>Contacto de emergencia 2</option>
-            </select>
-            <br><br><br>
-            <select class="contact custom-select" id="3" onclick="listarContactos();" onchange="guardarContactos();">
-                <option selected>Contacto de emergencia 3</option> 
-            </select>
-        </div>-->
         <div class="button_container">
         	<button class="add_button" onclick="guardarContactos();">Agregar</button>
         </div>
         <div id="listaContactos">
         	<table id="tabla_contactos">
-			  <tr>
+			  <tr id="tabla_contactosN">
 			    <th>Nombre</th>
 			    <th>Número</th>
 			    <th>&nbsp</th>
 			    <th>&nbsp</th>			    
-			  </tr>
-			  <tr>
-			    <td id="nombre_1">Pepe</td>
-			    <td id="numero_1">123</td>
-			    <td><i class="fa fa-phone fa-lg verde" aria-hidden="true"></i></td>
-			    <td><i class="fa fa-trash-o fa-lg rojo" aria-hidden="true"></i></td>
 			  </tr>
 			</table>
         </div>

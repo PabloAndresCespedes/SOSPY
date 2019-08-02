@@ -130,7 +130,7 @@
                     }
                 });
 
-                tx.executeSql("INSERT INTO PREFERENCIAS(ID, ID_DEPENDENCIA) VALUES(" + (parseInt(id_actual + 1)) + "," + parseInt(dato1) + ");", [], function (tx, result) {
+                tx.executeSql("INSERT INTO PREFERENCIAS VALUES(?,?)", [(parseInt(id_actual + 1)),parseInt(dato1)], function (tx, result) {
                         alert("Sus datos han sido guardados");
                 });
             }
