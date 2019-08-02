@@ -39,7 +39,7 @@
             function redirige(){
                 db.executeSql("SELECT COUNT(*) AS 'cont' FROM INICIO", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).cont;
-                    if(dato > 0 || dato != null){
+                    if(dato > 0){
                         $(location).attr('href','index2.html');
                     }
                 }, function(error) {
