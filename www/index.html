@@ -30,13 +30,22 @@
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
                 //llama = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
-
+                redirige();
             }
             /*FUNCION PARA VERIFICAR LLAMADA*/
             function onSuccess(result) {
                 alert("Success:" + result);
             }
-
+            function redirige(){
+                db.executeSql("SELECT COUNT(*) AS 'cont' FROM INICIO", [], function (resultSet) {
+                    var dato = resultSet.rows.item(0).cont;
+                    if(dato > 0 || dato != null){
+                        $(location).attr('href','index2.html');
+                    }
+                }, function(error) {
+                  alert('Tiene un error de: ' + error.message);
+                });
+            }
             /*FUNCION DE ERROR EN LA LLAMADA*/
             function onError(result) {
                 alert("Error:" + result);
@@ -139,12 +148,22 @@
                     var dato = resultSet.rows.item(0).maximo;
                         db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_bomb], function (resultSet) {
                             alert('Preferencia Bomberos guardada');
-                            $(location).attr('href','index2.html');
+                            insertarInicio();
                         }, function(error) {
                           alert('Tiene un error de: ' + error.message);
                     });
                 }, function(error) {
                   alert('error: ' + error.message);
+                });
+            }
+
+            function insertarInicio(){
+                db.executeSql('INSERT INTO INICIO VALUES (?)', [1], function (resultSet) {
+                    //alert('Inicio Registrado');
+                    //insertarInicio();
+                    $(location).attr('href','index2.html');
+                }, function(error) {
+                  alert('Tiene un error de: ' + error.message);
                 });
             }
             /*FUNCION QUE TIRA UN MENSAJE DE ERROR*/

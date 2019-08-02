@@ -83,7 +83,7 @@
                 db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).maximo;
                         db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_com], function (resultSet) {
-                            alert('Preferencia Bomberos guardada');
+                            alert('Preferencia Comisaria guardada');
                             $(location).attr('href','index2.html');
                         }, function(error) {
                           alert('Tiene un error de: ' + error.message);
