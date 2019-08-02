@@ -26,22 +26,16 @@
 
             document.addEventListener("deviceready", onDeviceReady, false);
             function onDeviceReady() {
-                
+
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
-                
             }
-            /*FUNCION QUE RETORNA LOS DEPARTAMENTOS*/
-            function listarTodosDepartamentos() {
+
+            function Departamentos(){
                 db.transaction(listarDepartamentos, error);
             }
-            /*FUNCION QUE RETORNA LAS COMISARIAS*/
-            function listarComisarias() {
-                db.transaction(listarComisaria, error);
-            }
-             /*FUNCION QUE RETORNA TODOS LOS DEPARTAMENTOS DEL PARAGUAY*/
+
             function listarDepartamentos(tx) {
-                /*SELECT DENTRO DE LA TABLA DEPARTAMENTOS*/
                 tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS", [], function (tx, result) {
                     var nDepartamentos = result.rows.length;
                     var htmlContenidoDepartamentos = "";
@@ -59,18 +53,21 @@
                     }
                 });
             }
-            /*FUNCION QUE RETORNA LAS COMISARIAS DE LA TABLA dependencias LA ENTIDAD ES 1*/
-            function listarComisaria(tx) {
+            
+            function Comisarias(){
+                db.transaction(listarComisarias, error);
+            }
+
+            function listarComisarias(tx) {
                 var v_id_com = $('#departamento').val();
 
                 tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_com + " AND ID_ENTIDAD = 1", [], function (tx, result) {
-                    var nBombero = result.rows.length;
+                    var nComisaria = result.rows.length;
                     var htmlCC = "";
-                    if (nBombero > 0) {
-                        for (var i = 0; i < nBombero; i++) {
+                    if (nComisaria > 0) {
+                        for (var i = 0; i < nComisaria; i++) {
                             var fila = result.rows.item(i);
                             htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
-                            alert("Sus datos han sido actualizados");
                         }
                         $('#comisaria').html(htmlCC);
                     }
@@ -79,22 +76,38 @@
                     }
                 });
             }
-            /*LINEA GRATUITA 911*/
-            function llamarPolicia(){
-                db.transaction(PoliceCall, error);
+
+            function guardarComisaria(){
+                var dep_id_com = $('#comisaria').val();
+
+                db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
+                    var dato = resultSet.rows.item(0).maximo;
+                        db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_com], function (resultSet) {
+                            alert('Preferencia Bomberos guardada');
+                            $(location).attr('href','index2.html');
+                        }, function(error) {
+                          alert('Tiene un error de: ' + error.message);
+                    });
+                }, function(error) {
+                  alert('error: ' + error.message);
+                });
             }
-            function PoliceCall(){
+
+            function llamarComisaria(){
                 llamar = window.plugins.CallNumber.callNumber(onSuccess, onError, "911", true);
             }
+
             function onSuccess(result) {
                 console.log("Success:" + result);
             }
+
             function onError(result) {
                 console.log("Error:" + result);
-            }            
+            } 
+
             function error(err) {
                 alert("error =" + err.message);
-            }
+            }        
 
             //FUNCION PARA CERRAR
             document.addEventListener('deviceready',function(){
@@ -114,10 +127,10 @@
         
     </head>
     <body>
-       
+        
         <div class="logo container-fluid">
-            <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
-        </div>    
+            <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">            
+        </div>
         
         <br> <br> <br> <br> <br> <br>
 
@@ -125,52 +138,29 @@
             <img src="img/police.png" class="ic2 rounded mx-auto d-block" alt="Responsive image" align="center">
         </div>
 
-        <div class="icono">
-            <div class="container-fluid" align="right">
-                <button class="icon btn btn-default" type="button">
-                    <a href="#"></a>
-                    <i class="fa fa-phone" aria-hidden="true"></i>
-                </button>        
-            </div> 
-
-            <div class="container-fluid" align="right">
-               <button class="icon btn btn-default" type="button">
-                    <a href="tel:911"></a>
-                    <i class="fa fa-address-book" aria-hidden="true"></i>
-                </button>            
-            </div>
-
-            <div class="container-fluid" align="right">
-               <button class="icon btn btn-default" type="button">
-                    <a href="#"></a>
-                    <i class="fa fa-phone" aria-hidden="true" onclick="llamarPolicia();"></i>
-                </button>            
-            </div>
-        </div>
-
-        
         <div class="navbar">
           <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a> 
           <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>  
           <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
           <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
         </div>
-        
-
+    
         <div class="llamada">
-            <select class="contact custom-select" id="departamento" onclick="listarTodosDepartamentos()" onchange="listarComisarias()">
-                   <option selected>Departamento</option>
+            <div>
+                <h3>Preferencia Comisarias</h3>
+            </div>
+            <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Comisarias();">
+                 <option selected>Departamento</option>
             </select>
             <br><br><br>
-            <select class="contact custom-select" id="comisaria">
-                    <option selected>Comisaria cercana</option>
+            <select class="contact2 custom-select" id="comisaria" onchange="guardarComisaria();">
+                <option selected>Comisaria Cercana</option>
             </select>
             <br><br><br>
-            <h2>
-                Línea gratuita: 911
-            </h2>
+            <span class="linea">
+                 <i class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarComisaria();"> Línea gratuita: 911</i>
+            </span>
         </div>
-
         
 
         <script src="js/jquery-3.3.1.slim.min.js"></script>

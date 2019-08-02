@@ -34,7 +34,27 @@ width: 60%;
   margin-top: 5px;
   border-radius: 20px;
  }
+ .contact1{
+    margin-top: 80%;
+    margin-left: 15%;
+    border-radius: 20px;
+}
+.contact2{
+  margin-top: 0%;
+  margin-left: 15%;
+  border-radius: 20px;
+}
 
+.btnTel{
+  border: 1px solid black;
+  padding: 12px 14.5px;
+  border-radius: 20px;
+  box-shadow: 3px 4px 0px 0px #888888;
+}
+
+.linea{
+  margin-left: 15%;
+}
 .navbar a {
   float: left;
   padding: 8px;
