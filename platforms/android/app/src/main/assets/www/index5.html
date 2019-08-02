@@ -44,7 +44,9 @@
             	tx.executeSql("SELECT NOMBRE, NUMERO_EMERGENCIA, ID FROM CONTACTOS",[],function(tx, result){
             		var html = "";
             		var filasN = result.rows.length;
-                    
+                    if(filasN >= 3){
+                        $("#btn_add").hide();
+                    }
             		if(filasN > 0){
             			for (var i = 0; i < filasN; i++) {
                             var fila = result.rows.item(i);
@@ -53,7 +55,8 @@
                        $("#tabla_contactos").append(html);
                     }
                     else {
-                        console.log("No hay números agendados, por favor seleccione");
+                        html += '<tr width="100%"><td align="center" width="100%">Sin lista de contactos</td></tr>';
+                        $("#tabla_contactos").append(html);
                     }
             	});           	
             }
@@ -160,7 +163,7 @@
           <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
         </div>
         <div class="button_container">
-        	<button class="add_button" onclick="guardarContactos();">Agregar</button>
+        	<button class="add_button" onclick="guardarContactos();" id="btn_add">Agregar</button>
         </div>
         <div id="listaContactos">
         	<table id="tabla_contactos">

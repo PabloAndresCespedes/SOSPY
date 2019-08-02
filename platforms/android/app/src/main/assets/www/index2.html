@@ -22,18 +22,14 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script>
             var db = null;  
-            //var prf = null;
-            //variable para la función llamarPreferencia
-            var llamar = null;
+            var llama = null;
 
             document.addEventListener("deviceready", onDeviceReady, false);
             function onDeviceReady() {
                 
                 console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
-                
-                //prf = preferenciasHacer();
-                
+                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });       
+                llama = window.plugins.CallNumber.callNumber(onSuccess, onError, number['NUMERO_BOMBERO'], true);
 
             }
 
@@ -46,20 +42,10 @@
             }
 
             function BomberoCall(tx){
-                tx.executeSql("select T.NUMERO as 'NUMERO_BOMBERO' from DEPENDENCIAS D inner join TELEFONOS T on(T.ID_DEPENDENCIAS = D.ID) where D.ID_ENTIDAD = 2", [], function (tx, result) {
-                    var nDatos = result.rows.length;
-                    
-                    if (nDatos > 0) {
-                        var number = result.rows.item(0);
-                        llama = window.plugins.CallNumber.callNumber(onSuccess, onError, number['NUMERO_BOMBERO'], true);
-                    }
-                    else {
-                        alert("no hay datos bomberos");
-                    }
-                });
+                alert('llamaBomber');
             }
             function PoliceCall(tx){
-                tx.executeSql("select T.NUMERO as 'NUMERO_POLICIA' from DEPENDENCIAS D inner join TELEFONOS T on(T.ID_DEPENDENCIAS = D.ID) where D.ID_ENTIDAD = 1", [], function (tx, result) {
+                tx.executeSql("select T.NUMERO as 'NUMERO_POLICIA' from DEPENDENCIAS D inner join TELEFONOS T on(T.ID_DEPENDENCIAS = D.ID) where D.ID_ENTIDAD = ?", [1], function (tx, result) {
                     var nDatos = result.rows.length;
                     
                     if (nDatos > 0) {
