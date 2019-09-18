@@ -29,6 +29,17 @@
 
                 console.log("device is ready");
                 db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+
+                DepActual();
+            }
+            function DepActual(){
+                db.executeSql('SELECT DP.ID as ID, DP.DESCRIPCION as DESCRIPCION FROM DEPENDENCIAS D INNER JOIN DEPARTAMENTOS DP ON DP.ID = D.ID_DEPARTAMENTO INNER JOIN PREFERENCIAS P ON P.ID_DEPENDENCIA = DP.ID WHERE P.ID_DEPENDENCIA = (SELECT MAX(PR.ID_DEPENDENCIA) FROM PREFERENCIAS PR)', [], function (resultSet) {
+                    alert('Inicio Registrado');
+                    //insertarInicio();
+                    //$(location).attr('href','index2.html');
+                }, function(error) {
+                  alert('Tiene un error de: ' + error.message);
+                });
             }
 
             function Departamentos(){
