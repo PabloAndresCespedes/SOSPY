@@ -35,7 +35,7 @@ width: 60%;
   border-radius: 20px;
  }
  .contact1{
-    margin-top: 80%;
+    margin-top: 15%;
     margin-left: 15%;
     border-radius: 20px;
 }
@@ -53,7 +53,7 @@ width: 60%;
 }
 
 .linea{
-  margin-left: 15%;
+  margin-left: 21%;
 }
 .navbar a {
   float: left;
@@ -169,7 +169,6 @@ th, td {
   padding-right: 10%;
 }
 .add_button{
-
   border-radius: 20px;
   padding: 2px 6px 5px 6px;
   background-color: white;
@@ -180,5 +179,21 @@ th, td {
   transform: translateY(4px);
 }
 .preferencia_class{
-  padding-top: 10%;
+  padding-top: 70%;
+  padding-left: 35%;
+}
+/*//////////////////////////////////////////////
+SECCION CLASES NUEVAS EL ANTERIOR DEJO, PORQUE 
+NO LE ENTIENDO BIEN, PACR 20/09/2019
+//////////////////////////////////////////////*/
+.logo_sospy{
+  border: 1px solid black;
+}
+
+.logo_bombero{
+  border: 1px solid blue;
+}
+
+.logo_policia{
+  border: 1px solid green;
 }
