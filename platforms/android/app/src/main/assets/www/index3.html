@@ -32,20 +32,16 @@
             console.log("device is ready");
             db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
 
-            DepActual(2);
+            verBomberoPreferencia();
         }
-        function DepActual(numero) {
-            db.executeSql("SELECT ID AS 'idB' FROM ENTIDADES WHERE ID = ?", [numero], function (resultSet) {
-                var dato = resultSet.rows.item(0).idB;
-                alert(dato);
-                /*db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato, dep_id_bomb], function (resultSet) {
-                    alert('Preferencia Bomberos guardada');
-                    $(location).attr('href', 'index2.html');
-                }, function (error) {
-                    alert('Tiene un error de: ' + error.message);
-                });*/
-            }, function (error) {
-                alert('error: ' + error.message);
+        function verBomberoPreferencia(){
+            db.transaction(DepBomCurr, error);
+        }
+        
+        function DepBomCurr(tx) {
+            tx.executeSql("SELECT A.DESCRIPCION||'-'||B.DESCRIPCION||'-'||B.DIRECCION AS 'DA' FROM DEPARTAMENTOS A INNER JOIN DEPENDENCIAS B ON (A.ID = B.ID_DEPARTAMENTO) INNER JOIN PREFERENCIAS C ON (C.ID_DEPENDENCIA = B.ID) WHERE C.ID = (SELECT MAX(X.ID) FROM PREFERENCIAS X INNER JOIN DEPENDENCIAS Y ON (X.ID_DEPENDENCIA = Y.ID AND Y.ID_ENTIDAD = 2))", [], function (tx, result) {
+                var data = result.rows.item(0)['DA'];
+                $('#pref_title').append(' '+data);
             });
         }
 
@@ -79,7 +75,7 @@
         function listarBomberos(tx) {
             var v_id_bom = $('#departamento').val();
 
-            tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_bom + " AND ID_ENTIDAD = 2", [], function (tx, result) {
+            tx.executeSql("select ID as 'ID', DESCRIPCION||' - '||DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_bom + " AND ID_ENTIDAD = 2", [], function (tx, result) {
                 var nBombero = result.rows.length;
                 var htmlCC = "";
                 if (nBombero > 0) {
@@ -159,10 +155,10 @@
 
     <div class="llamada">
         <div>
-            <h3>Preferencia Bomberos</h3>
+            <h3>Preferencia Bomberos:</h3>
         </div>
         <div class="preferencia_class">
-            <strong>Preferencia actual:</strong>
+            <strong id="pref_title">Preferencia actual:</strong>
         </div>
         <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Bomberos();">
             <option selected>Departamento</option>
