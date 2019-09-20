@@ -1,181 +1,193 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 
-        <link rel="stylesheet" type="text/css" href="css/all.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/all.css">
 
 
-        <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
-        <title>SOS PY</title>
-        
-        <script src="js/jquery-2.1.3.min.js"></script>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script>            
-            var llamar = null;
+    <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
+    <title>SOS PY</title>
 
-            document.addEventListener("deviceready", onDeviceReady, false);
-            function onDeviceReady() {
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        var llamar = null;
 
-                console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
+        document.addEventListener("deviceready", onDeviceReady, false);
+        function onDeviceReady() {
 
-                DepActual();
-            }
-            function DepActual(){
-                db.executeSql('SELECT DP.ID as ID, DP.DESCRIPCION as DESCRIPCION FROM DEPENDENCIAS D INNER JOIN DEPARTAMENTOS DP ON DP.ID = D.ID_DEPARTAMENTO INNER JOIN PREFERENCIAS P ON P.ID_DEPENDENCIA = DP.ID WHERE P.ID_DEPENDENCIA = (SELECT MAX(PR.ID_DEPENDENCIA) FROM PREFERENCIAS PR)', [], function (resultSet) {
-                    alert('Inicio Registrado');
-                    //insertarInicio();
-                    //$(location).attr('href','index2.html');
-                }, function(error) {
-                  alert('Tiene un error de: ' + error.message);
-                });
-            }
+            console.log("device is ready");
+            db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });
 
-            function Departamentos(){
-                db.transaction(listarDepartamentos, error);
-            }
+            DepActual(2);
+        }
+        function DepActual(numero) {
+            db.executeSql("SELECT ID AS 'idB' FROM ENTIDADES WHERE ID = ?", [numero], function (resultSet) {
+                var dato = resultSet.rows.item(0).idB;
+                alert(dato);
+                /*db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato, dep_id_bomb], function (resultSet) {
+                    alert('Preferencia Bomberos guardada');
+                    $(location).attr('href', 'index2.html');
+                }, function (error) {
+                    alert('Tiene un error de: ' + error.message);
+                });*/
+            }, function (error) {
+                alert('error: ' + error.message);
+            });
+        }
 
-            function listarDepartamentos(tx) {
-                tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS", [], function (tx, result) {
-                    var nDepartamentos = result.rows.length;
-                    var htmlContenidoDepartamentos = "";
+        function Departamentos() {
+            db.transaction(listarDepartamentos, error);
+        }
 
-                    if (nDepartamentos > 0) {
+        function listarDepartamentos(tx) {
+            tx.executeSql("select ID, DESCRIPCION as 'DESCRIPCION' from DEPARTAMENTOS", [], function (tx, result) {
+                var nDepartamentos = result.rows.length;
+                var htmlContenidoDepartamentos = "";
 
-                        for (var i = 0; i < nDepartamentos; i++) {
-                            var fila = result.rows.item(i);
-                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
-                        }
-                        $('#departamento').html(htmlContenidoDepartamentos);
+                if (nDepartamentos > 0) {
+
+                    for (var i = 0; i < nDepartamentos; i++) {
+                        var fila = result.rows.item(i);
+                        htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
                     }
-                    else {
-                        console.log("no hay datos");
+                    $('#departamento').html(htmlContenidoDepartamentos);
+                }
+                else {
+                    console.log("no hay datos");
+                }
+            });
+        }
+
+        function Bomberos() {
+            db.transaction(listarBomberos, error);
+        }
+
+        function listarBomberos(tx) {
+            var v_id_bom = $('#departamento').val();
+
+            tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_bom + " AND ID_ENTIDAD = 2", [], function (tx, result) {
+                var nBombero = result.rows.length;
+                var htmlCC = "";
+                if (nBombero > 0) {
+                    for (var i = 0; i < nBombero; i++) {
+                        var fila = result.rows.item(i);
+                        htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
                     }
+                    $('#bombero').html(htmlCC);
+                }
+                else {
+                    alert("no hay datos");
+                }
+            });
+        }
+
+        function guardarBombero() {
+            var dep_id_bomb = $('#bombero').val();
+
+            db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
+                var dato = resultSet.rows.item(0).maximo;
+                db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato, dep_id_bomb], function (resultSet) {
+                    alert('Preferencia Bomberos guardada');
+                    $(location).attr('href', 'index2.html');
+                }, function (error) {
+                    alert('Tiene un error de: ' + error.message);
                 });
-            }
-            
-            function Bomberos(){
-                db.transaction(listarBomberos, error);
-            }
+            }, function (error) {
+                alert('error: ' + error.message);
+            });
+        }
 
-            function listarBomberos(tx) {
-                var v_id_bom = $('#departamento').val();
+        function llamarBombero() {
+            llamar = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
+        }
 
-                tx.executeSql("select ID as 'ID', DESCRIPCION||' - '|| DIRECCION as 'DESCRIPCION' from DEPENDENCIAS where ID_DEPARTAMENTO = " + v_id_bom + " AND ID_ENTIDAD = 2", [], function (tx, result) {
-                    var nBombero = result.rows.length;
-                    var htmlCC = "";
-                    if (nBombero > 0) {
-                        for (var i = 0; i < nBombero; i++) {
-                            var fila = result.rows.item(i);
-                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
-                        }
-                        $('#bombero').html(htmlCC);
-                    }
-                    else {
-                        alert("no hay datos");
-                    }
-                });
-            }
+        function onSuccess(result) {
+            console.log("Success:" + result);
+        }
 
-            function guardarBombero(){
-                var dep_id_bomb = $('#bombero').val();
+        function onError(result) {
+            console.log("Error:" + result);
+        }
 
-                db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
-                    var dato = resultSet.rows.item(0).maximo;
-                        db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_bomb], function (resultSet) {
-                            alert('Preferencia Bomberos guardada');
-                            $(location).attr('href','index2.html');
-                        }, function(error) {
-                          alert('Tiene un error de: ' + error.message);
-                    });
-                }, function(error) {
-                  alert('error: ' + error.message);
-                });
-            }
+        function error(err) {
+            alert("error =" + err.message);
+        }
 
-            function llamarBombero(){
-                llamar = window.plugins.CallNumber.callNumber(onSuccess, onError, "132", true);
-            }
-
-            function onSuccess(result) {
-                console.log("Success:" + result);
-            }
-
-            function onError(result) {
-                console.log("Error:" + result);
-            } 
-
-            function error(err) {
-                alert("error =" + err.message);
-            }        
-
-            //FUNCION PARA CERRAR
-            document.addEventListener('deviceready',function(){
-            document.addEventListener('backbutton',function(e){
-                console.log("history is "+ history.length);
-                if(history.length==0){
+        //FUNCION PARA CERRAR
+        document.addEventListener('deviceready', function () {
+            document.addEventListener('backbutton', function (e) {
+                console.log("history is " + history.length);
+                if (history.length == 0) {
                     e.preventDefault();
                     navigator.app.exitApp();
                 }
-                else{
-                    window.location.href="index2.html";
+                else {
+                    window.location.href = "index2.html";
                 }
-                },false);
-            },false);
+            }, false);
+        }, false);
 
-        </script>
-        
-    </head>
-    <body>
-        
-        <div class="logo container-fluid">
-            <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">            
-        </div>
-        
-        <br> <br> <br> <br> <br> <br>
+    </script>
 
-        <div class="container-fluid">
-            <img src="img/bombero.png" class="ic2 rounded mx-auto d-block" alt="Responsive image" align="center">
-        </div>
+</head>
 
-        <div class="navbar">
-          <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a> 
-          <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>  
-          <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
-          <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
-        </div>
-    
-        <div class="llamada">
-            <div>
-                <h3>Preferencia Bomberos</h3>
-            </div>
-            <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Bomberos();">
-                 <option selected>Departamento</option>
-            </select>
-            <br><br><br>
-            <select class="contact2 custom-select" id="bombero" onchange="guardarBombero();">
-                <option selected>CIA de Bomberos cercana</option>
-            </select>
-            <br><br><br>
-            <span class="linea">
-                 <i class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarBombero();"> Línea gratuita: 132</i>
-            </span>
-        </div>
-        
+<body>
 
-        <script src="js/jquery-3.3.1.slim.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-    </body>
+    <div class="logo container-fluid">
+        <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
+    </div>
+
+    <br> <br> <br> <br> <br> <br>
+
+    <div class="container-fluid">
+        <img src="img/bombero.png" class="ic2 rounded mx-auto d-block" alt="Responsive image" align="center">
+    </div>
+
+    <div class="llamada">
+        <div>
+            <h3>Preferencia Bomberos</h3>
+        </div>
+        <div class="preferencia_class">
+            <strong>Preferencia actual:</strong>
+        </div>
+        <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Bomberos();">
+            <option selected>Departamento</option>
+        </select>
+        <br><br><br>
+        <select class="contact2 custom-select" id="bombero" onchange="guardarBombero();">
+            <option selected>CIA de Bomberos cercana</option>
+        </select>
+        <br><br><br>
+        <span class="linea">
+            <i class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarBombero();"> Línea gratuita: 132</i>
+        </span>
+    </div>
+
+
+    <div class="navbar">
+        <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a>
+        <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>
+        <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
+        <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
+    </div>
+
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
 </html>

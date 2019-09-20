@@ -31,9 +31,8 @@
                 $(document).on("pagecontainerload", onPageLoad);
                 $(document).on("backbutton", onBackButton);
                 console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 });                      
+                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 }); 
             }
-
             function llamarEntidad(entidad){
                 db.executeSql("SELECT MAX(PP.ID) AS 'maximo' FROM PREFERENCIAS PP INNER JOIN DEPENDENCIAS DD ON (PP.ID_DEPENDENCIA = DD.ID) WHERE DD.ID_ENTIDAD = ?", [entidad], function (resultSet) {
                     var ultimo = resultSet.rows.item(0).maximo;
@@ -53,7 +52,6 @@
                 console.log("Success:" + result);
             }
 
-            /*FUNCION DE ERROR EN LA LLAMADA*/
             function onError(result) {
                 console.log("Error:" + result);
             }
@@ -62,7 +60,6 @@
                 alert("error =" + err.message);
             }
 
-            //FUNCION PARA CERRAR
             function onBackButton(e){
                 e.preventDefault();
                 pageHistory.pop();

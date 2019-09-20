@@ -179,4 +179,6 @@ th, td {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
-
+.preferencia_class{
+  padding-top: 10%;
+}
