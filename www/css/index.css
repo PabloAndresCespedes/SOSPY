@@ -110,6 +110,15 @@ width: 60%;
     padding-bottom: 0;
     margin-top: 25%;
 }
+.ic3{
+   width: 50%;
+    height: 15%;
+    margin-left: 5%;
+    margin-right: 6.5%;
+    padding: 5%;
+    padding-bottom: 0;
+    margin-top: 10%;
+}
 .ic2{
   width:130px;
   height:130px;
@@ -184,10 +193,21 @@ th, td {
   padding-left: 35%;
 }
 /*//////////////////////////////////////////////
+index 2
 SECCION CLASES NUEVAS EL ANTERIOR DEJO, PORQUE 
 NO LE ENTIENDO BIEN, PACR 20/09/2019
 //////////////////////////////////////////////*/
 .logo_sospy{
   margin-left: 5%;
 }
+.cverde{
+  color: #008100;
+}
 
+/*////////////////////////
+index 3
+//////////////////////////*/
+html, body, .contIndexTres{
+  width: 100%;
+  height: 100%;
+}

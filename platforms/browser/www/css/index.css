@@ -35,7 +35,7 @@ width: 60%;
   border-radius: 20px;
  }
  .contact1{
-    margin-top: 30%;
+    margin-top: 15%;
     margin-left: 15%;
     border-radius: 20px;
 }
@@ -53,7 +53,7 @@ width: 60%;
 }
 
 .linea{
-  margin-left: 15%;
+  margin-left: 21%;
 }
 .navbar a {
   float: left;
@@ -90,7 +90,7 @@ width: 60%;
 }
 .foto1{
     width: 30%;
-    padding: 8% 10px 10px;
+    padding: 5% 5%;
 }
 .logo{
     margin-left: 3%;
@@ -102,12 +102,22 @@ width: 60%;
     margin-right: 15px;
 }
 .ic{
-    width:180px;
-    height:180px;
-    margin: 18px;
-    margin-left: 20px;
-    margin-right: 20px;
-    padding:10px;
+    width: 50%;
+    height: 15%;
+    margin-left: 5%;
+    margin-right: 6.5%;
+    padding: 5%;
+    padding-bottom: 0;
+    margin-top: 25%;
+}
+.ic3{
+   width: 50%;
+    height: 15%;
+    margin-left: 5%;
+    margin-right: 6.5%;
+    padding: 5%;
+    padding-bottom: 0;
+    margin-top: 10%;
 }
 .ic2{
   width:130px;
@@ -179,6 +189,16 @@ th, td {
   transform: translateY(4px);
 }
 .preferencia_class{
-  padding-top: 100%;
+  padding-top: 70%;
   padding-left: 35%;
+}
+/*//////////////////////////////////////////////
+SECCION CLASES NUEVAS EL ANTERIOR DEJO, PORQUE 
+NO LE ENTIENDO BIEN, PACR 20/09/2019
+//////////////////////////////////////////////*/
+.logo_sospy{
+  margin-left: 5%;
+}
+.cverde{
+  color: #008100;
 }
