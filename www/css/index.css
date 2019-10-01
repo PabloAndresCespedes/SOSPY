@@ -1,5 +1,5 @@
 body{
-    background-image: url(../img/img3.jpg);
+    background-image: url(../img/Fondo2.jpg);
     background-position:  center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -210,4 +210,32 @@ index 3
 html, body, .contIndexTres{
   width: 100%;
   height: 100%;
+}
+
+.img_opacy{
+  opacity: 0.2;
+  position: absolute;
+  z-index: -1;
+  right: 10%;
+  top: 25%;
+}
+
+.contTitlePref{
+  margin-top: 10%;
+  position: absolute;
+  width: 100%;
+  margin-left: 25%;
+}
+
+.conPrefDetBomb{
+  margin-top: 30%;
+  position: absolute;
+  width: 100%;
+  margin-left: 25%;
+}
+.cont_item{
+  border: 1px solid black;
+  top: 35%;
+  position: fixed;
+  width: 100%;
 }
