@@ -35,26 +35,29 @@ width: 60%;
   border-radius: 20px;
  }
  .contact1{
-    margin-top: 15%;
-    margin-left: 15%;
-    border-radius: 20px;
+  border-radius: 20px;
+  border: 1px solid #041d35;
+  opacity: 0.8;
 }
 .contact2{
-  margin-top: 0%;
-  margin-left: 15%;
   border-radius: 20px;
+  border: 1px solid #041d35;
+  opacity: 0.8;
 }
 
 .btnTel{
-  border: 1px solid black;
-  padding: 12px 14.5px;
-  border-radius: 20px;
-  box-shadow: 3px 4px 0px 0px #888888;
+    border: 1px solid black;
+    padding: 12px 14.5px;
+    border-radius: 20px;
+    box-shadow: 5px 7px 0px 0px #5c5959b5;
+    outline: 0 !important;
 }
 
-.linea{
-  margin-left: 21%;
+.btnTel:active{
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
+
 .navbar a {
   float: left;
   padding: 8px;
@@ -230,12 +233,16 @@ html, body, .contIndexTres{
 .conPrefDetBomb{
   margin-top: 30%;
   position: absolute;
-  width: 100%;
-  margin-left: 25%;
+  width: 80%;
+  margin-left: 12%;
 }
 .cont_item{
-  border: 1px solid black;
   top: 35%;
   position: fixed;
   width: 100%;
+  display: grid;
+  /* align-items: center; */
+  justify-content: center;
+  min-height: 25vh;
 }
+
