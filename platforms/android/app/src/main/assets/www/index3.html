@@ -34,14 +34,14 @@
 
             verBomberoPreferencia();
         }
-        function verBomberoPreferencia(){
+        function verBomberoPreferencia() {
             db.transaction(DepBomCurr, error);
         }
-        
+
         function DepBomCurr(tx) {
             tx.executeSql("SELECT A.DESCRIPCION||'-'||B.DESCRIPCION||'-'||B.DIRECCION AS 'DA' FROM DEPARTAMENTOS A INNER JOIN DEPENDENCIAS B ON (A.ID = B.ID_DEPARTAMENTO) INNER JOIN PREFERENCIAS C ON (C.ID_DEPENDENCIA = B.ID) WHERE C.ID = (SELECT MAX(X.ID) FROM PREFERENCIAS X INNER JOIN DEPENDENCIAS Y ON (X.ID_DEPENDENCIA = Y.ID AND Y.ID_ENTIDAD = 2))", [], function (tx, result) {
                 var data = result.rows.item(0)['DA'];
-                $('#pref_title').append(' '+data);
+                $('#pref_title').append(' ' + data);
             });
         }
 
@@ -142,45 +142,47 @@
 </head>
 
 <body>
+    <div class="contIndexTres">
+        <div class="logo_sospy">
+            <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
+        </div>
 
-    <div class="logo container-fluid">
-        <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
-    </div>
+        <div class="conImgBomb">
+            <img src="img/bombero.png" class="img_opacy" alt="Responsive image" align="center">
+        </div>
 
-    <br> <br> <br> <br> <br> <br>
-
-    <div class="container-fluid">
-        <img src="img/bombero.png" class="ic2 rounded mx-auto d-block" alt="Responsive image" align="center">
-    </div>
-
-    <div class="llamada">
-        <div>
+        <div class="contTitlePref">
             <h3>Preferencia Bomberos:</h3>
         </div>
-        <div class="preferencia_class">
-            <strong>Preferencia actual:</strong><br>
-            <strong id="pref_title"></strong>
+
+        <div class="conPrefDetBomb">
+            <strong id="pref_title"><span style="color: red; text-decoration: underline;">Actual</span><span style="color: red;">:</span> Caaguazú-K92 Campo 9-Campo 9</strong>
         </div>
-        <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Bomberos();">
-            <option selected>Departamento</option>
-        </select>
-        <br><br><br>
-        <select class="contact2 custom-select" id="bombero" onchange="guardarBombero();">
-            <option selected>CIA de Bomberos cercana</option>
-        </select>
-        <br><br><br>
-        <span class="linea">
-            <i class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarBombero();"> Línea gratuita: 132</i>
-        </span>
+        <div class="cont_item">
+            <div class="contListOne">
+                <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Bomberos();">
+                    <option selected>Departamento</option>
+                </select>
+            </div>
+
+            <div class="contListTwo">
+                <select class="contact2 custom-select" id="bombero" onchange="guardarBombero();">
+                    <option selected>CIA de Bomberos cercana</option>
+                </select>
+            </div>
+
+            <div class="contBtnFree">
+                <button class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarBombero();"> Línea gratuita: 132</button>
+            </div>
+        </div>         
     </div>
-
-
     <div class="navbar">
         <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a>
         <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>
         <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
         <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
     </div>
+    
 
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
