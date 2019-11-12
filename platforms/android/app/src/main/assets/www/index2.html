@@ -1,86 +1,88 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 
-        <link rel="stylesheet" type="text/css" href="css/all.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+
+    <link rel="stylesheet" type="text/css" href="css/all.css">
 
 
-        <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
-        <title>SOS PY</title>
-        <script src="js/jquery-2.1.3.min.js"></script>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script>
-            var pageHistory = [];
-            var db = null;  
-            var llama = null;
-            $(document).on("deviceready", onDeviceReady);
-            document.addEventListener("deviceready", onDeviceReady, false);
+    <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
+    <title>SOS PY</title>
+    
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        var pageHistory = [];
+        var db = null;  
+        var llama = null;
+        $(document).on("deviceready", onDeviceReady);
+        document.addEventListener("deviceready", onDeviceReady, false);
 
-            function onDeviceReady() {
-                $(document).on("pagecontainerload", onPageLoad);
-                $(document).on("backbutton", onBackButton);
-                console.log("device is ready");
-                db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 }); 
-            }
-            function llamarEntidad(entidad){
-                db.executeSql("SELECT MAX(PP.ID) AS 'maximo' FROM PREFERENCIAS PP INNER JOIN DEPENDENCIAS DD ON (PP.ID_DEPENDENCIA = DD.ID) WHERE DD.ID_ENTIDAD = ?", [entidad], function (resultSet) {
-                    var ultimo = resultSet.rows.item(0).maximo;
+        function onDeviceReady() {
+            $(document).on("pagecontainerload", onPageLoad);
+            $(document).on("backbutton", onBackButton);
+            console.log("device is ready");
+            db = window.sqlitePlugin.openDatabase({ name: "sospy.db", createFromLocation: 1 }); 
+        }
+        function llamarEntidad(entidad){
+            db.executeSql("SELECT MAX(PP.ID) AS 'maximo' FROM PREFERENCIAS PP INNER JOIN DEPENDENCIAS DD ON (PP.ID_DEPENDENCIA = DD.ID) WHERE DD.ID_ENTIDAD = ?", [entidad], function (resultSet) {
+                var ultimo = resultSet.rows.item(0).maximo;
 
-                    db.executeSql("SELECT T.NUMERO AS 'numero' FROM PREFERENCIAS P INNER JOIN TELEFONOS T ON (P.ID_DEPENDENCIA = T.ID_DEPENDENCIAS)INNER JOIN DEPENDENCIAS D ON (D.ID = P.ID_DEPENDENCIA) WHERE P.ID = ?", [ultimo], function (resultSet) {
-                        var numeroEnti = resultSet.rows.item(0).numero;
-                        llama = window.plugins.CallNumber.callNumber(onSuccess, onError, numeroEnti, true);
-                    }, function(error) {
-                      alert('error: ' + error.message);
-                    });
+                db.executeSql("SELECT T.NUMERO AS 'numero' FROM PREFERENCIAS P INNER JOIN TELEFONOS T ON (P.ID_DEPENDENCIA = T.ID_DEPENDENCIAS)INNER JOIN DEPENDENCIAS D ON (D.ID = P.ID_DEPENDENCIA) WHERE P.ID = ?", [ultimo], function (resultSet) {
+                    var numeroEnti = resultSet.rows.item(0).numero;
+                    llama = window.plugins.CallNumber.callNumber(onSuccess, onError, numeroEnti, true);
                 }, function(error) {
-                  alert('error: ' + error.message);
+                    alert('error: ' + error.message);
                 });
-            }
+            }, function(error) {
+                alert('error: ' + error.message);
+            });
+        }
 
-            function onSuccess(result) {
-                console.log("Success:" + result);
-            }
+        function onSuccess(result) {
+            console.log("Success:" + result);
+        }
 
-            function onError(result) {
-                console.log("Error:" + result);
-            }
-            
-            function error(err) {
-                alert("error =" + err.message);
-            }
+        function onError(result) {
+            console.log("Error:" + result);
+        }
+        
+        function error(err) {
+            alert("error =" + err.message);
+        }
 
-            function onBackButton(e){
-                e.preventDefault();
-                pageHistory.pop();
+        function onBackButton(e){
+            e.preventDefault();
+            pageHistory.pop();
 
-                if(pageHistory.length==0){
-                    navigator.app.exitApp();
-                }
-                else{
-                    navigator.app.backHistory();
-                }
+            if(pageHistory.length==0){
+                navigator.app.exitApp();
             }
+            else{
+                navigator.app.backHistory();
+            }
+        }
 
-            function onPageLoad(e, ui){
-                var pageId = ui.toPage.attr('id');
-                if(pageId !== pageHistory[pageHistory.length]){
-                    pageHistory.push(pageId);
-                }    
-            }
-            
-        </script>
-    </head>
+        function onPageLoad(e, ui){
+            var pageId = ui.toPage.attr('id');
+            if(pageId !== pageHistory[pageHistory.length]){
+                pageHistory.push(pageId);
+            }    
+        }
+        
+    </script>
+</head>
     <body>
         <div class="contenedor_index_dos">
 
