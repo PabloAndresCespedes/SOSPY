@@ -143,16 +143,42 @@
 
 </head>
 
-<body>
+<body id="preferencias">
+    <div class="contIndexTres">
+        <div class="logo_sospy">
+            <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
+        </div>
 
-    <div class="logo container-fluid">
-        <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
-    </div>
+        <div class="conImgBomb">
+            <img src="img/police.png" class="img_opacy" alt="Responsive image" align="center">
+        </div>
 
-    <br> <br> <br> <br> <br> <br>
+        <div class="contTitlePref">
+            <h3>Preferencia Policía:</h3>
+        </div>
 
-    <div class="container-fluid">
-        <img src="img/police.png" class="ic2 rounded mx-auto d-block" alt="Responsive image" align="center">
+        <div class="conPrefDetBomb">
+            <strong id="pref_title"><span style="color: red; text-decoration: underline;">Actual</span><span style="color: red;">:</span>-Campo 9</strong>
+            <!-- <h3>Preferencia Comisarias</h3> -->
+        </div>
+
+        <div class="cont_item">
+            <div class="contListOne">
+                <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Comisarias();">
+                    <option selected>Departamento</option>
+                </select>
+            </div>
+        
+            <div class="contListTwo">
+                <select class="contact2 custom-select" id="comisaria" onchange="guardarComisaria();">
+                    <option selected>Comisaria Cercana</option>
+                </select>
+            </div>
+        
+            <div class="contBtnFree">
+                <button class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarComisaria();"> Línea gratuita: 911</button>
+            </div>
+        </div>
     </div>
 
     <div class="navbar">
@@ -160,27 +186,6 @@
         <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>
         <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
         <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
-    </div>
-
-    <div class="llamada">
-        <div>
-            <h3>Preferencia Comisarias</h3>
-        </div>
-        <div class="preferencia_class">
-            <strong>Preferencia actual:</strong><br>
-            <strong id="pref_title"></strong>
-        </div>
-        <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Comisarias();">
-            <option selected>Departamento</option>
-        </select>
-        <br><br><br>
-        <select class="contact2 custom-select" id="comisaria" onchange="guardarComisaria();">
-            <option selected>Comisaria Cercana</option>
-        </select>
-        <br><br><br>
-        <span class="linea">
-            <i class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarComisaria();"> Línea gratuita: 911</i>
-        </span>
     </div>
 
 
