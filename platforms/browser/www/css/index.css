@@ -1,9 +1,14 @@
-body{
+/* body{
   background-image: url(../img/Fondo2.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed !important;
   background-size: cover;
+} */
+body{
+  background-color: #DEE1E3;
+  background-image: linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(rgba(0,0,0,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.035) 1px,transparent 1px);
+  background-size: 96px 96px,96px 96px,24px 24px,24px 24px;   
 }
 #preferencias{
   background-image: url(../img/Fondo2.jpg);
