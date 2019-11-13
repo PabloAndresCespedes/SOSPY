@@ -46,7 +46,18 @@
                   alert('Tiene un error de: ' + error.message);
                 });
             }
-            
+            function sonidoSave(){
+                navigator.notification.beep(2);
+            }
+            function alertPreferencia(){
+                navigator.notification.alert(
+                    'Preferencias Guardadas!',  // message
+                    sonidoSave,         // callback
+                    'Preferencia',            // title
+                    'Entendido'                  // buttonName
+                );
+            }
+
             function onError(result) {
                 alert("Error:" + result);
             }
@@ -132,7 +143,8 @@
                 db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).maximo;
                         db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_com], function (resultSet) {
-                            alert('Preferencia Comisaria guardada');
+                            //alert('Preferencia Comisaria guardada');
+                            //alertComisaria();
                             insertarPreferencia2();
                         }, function(error) {
                           alert('Tiene un error de: ' + error.message);
@@ -147,7 +159,8 @@
                 db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).maximo;
                         db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_bomb], function (resultSet) {
-                            alert('Preferencia Bomberos guardada');
+                           // alert('Preferencia Bomberos guardada');
+                            alertPreferencia();
                             insertarInicio();
                         }, function(error) {
                           alert('Tiene un error de: ' + error.message);

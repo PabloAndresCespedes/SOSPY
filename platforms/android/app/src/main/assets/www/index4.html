@@ -91,20 +91,32 @@
                 }
             });
         }
-
+        function sonidoSave(){
+                navigator.notification.beep(2);
+        }
+        function alertPreferencia(){
+            navigator.notification.alert(
+                'Preferencias de Comisarias Guardada!',  // message
+                sonidoSave,         // callback
+                'Preferencia',            // title
+                'Entendido'                  // buttonName
+            );
+        }
+    
         function guardarComisaria() {
             var dep_id_com = $('#comisaria').val();
 
             db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                 var dato = resultSet.rows.item(0).maximo;
                 db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato, dep_id_com], function (resultSet) {
-                    alert('Preferencia Comisaria guardada');
+                    //alert('Preferencia Comisaria guardada');
+                    alertPreferencia();
                     $(location).attr('href', 'index2.html');
                 }, function (error) {
-                    alert('Tiene un error de: ' + error.message);
+                    console.log('Tiene un error de: ' + error.message);
                 });
             }, function (error) {
-                alert('error: ' + error.message);
+                console.log('error: ' + error.message);
             });
         }
 

@@ -18,6 +18,9 @@
     },
     "cordova-plugin-contacts": {
       "PACKAGE_NAME": "sospy.sospy.db"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "sospy.sospy.db"
     }
   },
   "dependent_plugins": {},
@@ -122,12 +125,29 @@
       "merges": [
         "navigator.contacts"
       ]
+    },
+    {
+      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+      "id": "cordova-plugin-dialogs.notification",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
+      ]
+    },
+    {
+      "file": "plugins/cordova-plugin-dialogs/www/browser/notification.js",
+      "id": "cordova-plugin-dialogs.notification_browser",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
+      ]
     }
   ],
   "plugin_metadata": {
     "com.brodysoft.sqlitePlugin": "1.0.6",
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-call-number": "1.0.1",
-    "cordova-plugin-contacts": "3.0.1"
+    "cordova-plugin-contacts": "3.0.1",
+    "cordova-plugin-dialogs": "2.0.2"
   }
 }

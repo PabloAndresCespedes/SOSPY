@@ -66,7 +66,17 @@
                 }
             });
         }
-
+        function sonidoSave(){
+                navigator.notification.beep(2);
+        }
+        function alertPreferencia(){
+            navigator.notification.alert(
+                'Preferencia de Bomberos Guardada!',  // message
+                sonidoSave,         // callback
+                'Preferencia',            // title
+                'Entendido'                  // buttonName
+            );
+        }
         function Bomberos() {
             db.transaction(listarBomberos, error);
         }
@@ -96,7 +106,8 @@
             db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                 var dato = resultSet.rows.item(0).maximo;
                 db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato, dep_id_bomb], function (resultSet) {
-                    alert('Preferencia Bomberos guardada');
+                    //alert('Preferencia Bomberos guardada');
+                    alertPreferencia();
                     $(location).attr('href', 'index2.html');
                 }, function (error) {
                     alert('Tiene un error de: ' + error.message);
@@ -175,20 +186,13 @@
                 <button class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarBombero();"> Línea gratuita: 132</button>
             </div>
         </div>  
-
         <div class="navbar">
             <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a>
             <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>
             <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
             <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
         </div>       
-    
-        <div class="navbar">
-            <a href="index2.html"><i class="fa fa-fw fa-home"></i>Inicio</a>
-            <a href="index3.html"><i class="fa fa-fw fa-user"></i> Bomberos</a>
-            <a href="index4.html"><i class="fa fa-fw fa-user"></i> Policia</a>
-            <a href="index5.html"><i class="fa fa-fw fa-envelope"></i> Contactos</a>
-        </div>
+        
     </div> 
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>

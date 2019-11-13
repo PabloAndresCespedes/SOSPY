@@ -43,10 +43,10 @@
                     var numeroEnti = resultSet.rows.item(0).numero;
                     llama = window.plugins.CallNumber.callNumber(onSuccess, onError, numeroEnti, true);
                 }, function(error) {
-                    alert('error: ' + error.message);
+                    console.log('error: ' + error.message);
                 });
             }, function(error) {
-                alert('error: ' + error.message);
+                console.log('error: ' + error.message);
             });
         }
 
@@ -59,7 +59,7 @@
         }
         
         function error(err) {
-            alert("error =" + err.message);
+            console.log("error =" + err.message);
         }
 
         function onBackButton(e){

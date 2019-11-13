@@ -60,6 +60,26 @@
                     }
             	});           	
             }
+            function sonidoSave(){
+                navigator.notification.beep(2);
+            }
+            function alertPreferencia(){
+                navigator.notification.alert(
+                    'Contacto Agendado!',  // message
+                    sonidoSave,         // callback
+                    'Contactos',            // title
+                    'Entendido'                  // buttonName
+                );
+            }
+
+            function alertEliminar(){
+                navigator.notification.alert(
+                    'Contacto Eliminado!',  // message
+                    sonidoSave,         // callback
+                    'Eliminar',            // title
+                    'Entendido'                  // buttonName
+                );
+            }
 
             function llamaContacto(id){
                 
@@ -74,7 +94,8 @@
 
             function eliminarContacto(id){
                 db.executeSql("DELETE FROM CONTACTOS WHERE ID = ?", [id], function (resultSet) {
-                         alert('Contacto eliminado'); 
+                         //alert('Contacto eliminado'); 
+                         alertEliminar();
                          actualizarLista();
                 }, function(error) {
                   alert('error: ' + error.message);
@@ -95,20 +116,21 @@
                         db.executeSql("SELECT MAX((ID)+1) AS maximo FROM CONTACTOS", [], function (resultSet) {
                           var dato = resultSet.rows.item(0).maximo;
                             db.executeSql('INSERT INTO CONTACTOS VALUES (?,?,?)', [dato,number,name], function (resultSet) {
-                                alert('Contacto agendado');
+                                //alert('Contacto agendado');
+                                alertPreferencia();
                                 actualizarLista();
                             }, function(error) {
-                              alert('Tiene un error de: ' + error.message);
+                              console.log('Tiene un error de: ' + error.message);
                             });
                         }, function(error) {
-                          alert('error: ' + error.message);
+                            console.log('error: ' + error.message);
                         });
                     }else{
-                        alert('Error en numero o nombre');
+                        console.log('Error en numero o nombre');
                     }
 
                 },function(err){
-                    alert('Error: ' + err);
+                    console.log('Error: ' + err);
                 });             
             }
 

@@ -106,12 +106,29 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "merges": [
         ""
       ]
+    },
+    {
+      "id": "cordova-plugin-dialogs.notification",
+      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
+      ]
+    },
+    {
+      "id": "cordova-plugin-dialogs.notification_android",
+      "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
+      ]
     }
   ];
   module.exports.metadata = {
     "com.brodysoft.sqlitePlugin": "1.0.6",
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-call-number": "1.0.1",
-    "cordova-plugin-contacts": "3.0.1"
+    "cordova-plugin-contacts": "3.0.1",
+    "cordova-plugin-dialogs": "2.0.2"
   };
 });
