@@ -1,19 +1,15 @@
+/* body{
+  background-image: url(../img/Fondo2.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 100%;
+  background-attachment: fixed;
+  background-size: cover;
+} */
 body{
-  background-image: url(../img/Fondo2.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  max-width: 100%;
-  background-attachment: fixed;
-  background-size: cover;
-}
-#preferencias{
-  background-image: url(../img/Fondo2.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  max-width: 100%;
-  background-attachment: fixed;
-  background-size: cover;
-  margin-top: 20%;
+  background-color: #DEE1E3;
+  background-image: linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(rgba(0,0,0,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.035) 1px,transparent 1px);
+  background-size: 96px 96px,96px 96px,24px 24px,24px 24px;   
 }
 a{
     border-radius: 5px;
