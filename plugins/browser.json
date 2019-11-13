@@ -15,6 +15,9 @@
     },
     "cordova-plugin-contacts": {
       "PACKAGE_NAME": "sospy.sospy.db"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "sospy.sospy.db"
     }
   },
   "dependent_plugins": {

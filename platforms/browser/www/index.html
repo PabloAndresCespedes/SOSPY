@@ -46,7 +46,14 @@
                   alert('Tiene un error de: ' + error.message);
                 });
             }
-            
+            function alertComisaria(){
+                navigator.notification.alert(
+                                'Comisaría Guardada',  // message
+                                alertDismissed,         // callback
+                                'Preferencia',            // title
+                                'OK'                  // buttonName
+                            );
+            }
             function onError(result) {
                 alert("Error:" + result);
             }
@@ -132,7 +139,8 @@
                 db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).maximo;
                         db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_com], function (resultSet) {
-                            alert('Preferencia Comisaria guardada');
+                            //alert('Preferencia Comisaria guardada');
+                            alertComisaria();
                             insertarPreferencia2();
                         }, function(error) {
                           alert('Tiene un error de: ' + error.message);
