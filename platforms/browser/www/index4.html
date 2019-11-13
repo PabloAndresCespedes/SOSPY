@@ -91,20 +91,32 @@
                 }
             });
         }
-
+        function sonidoSave(){
+                navigator.notification.beep(2);
+        }
+        function alertPreferencia(){
+            navigator.notification.alert(
+                'Preferencias Guardadas!',  // message
+                sonidoSave,         // callback
+                'Preferencia',            // title
+                'Entendido'                  // buttonName
+            );
+        }
+    
         function guardarComisaria() {
             var dep_id_com = $('#comisaria').val();
 
             db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                 var dato = resultSet.rows.item(0).maximo;
                 db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato, dep_id_com], function (resultSet) {
-                    alert('Preferencia Comisaria guardada');
+                    //alert('Preferencia Comisaria guardada');
+                    alertPreferencia();
                     $(location).attr('href', 'index2.html');
                 }, function (error) {
-                    alert('Tiene un error de: ' + error.message);
+                    console.log('Tiene un error de: ' + error.message);
                 });
             }, function (error) {
-                alert('error: ' + error.message);
+                console.log('error: ' + error.message);
             });
         }
 
@@ -142,11 +154,7 @@
 
 </head>
 
-<<<<<<< HEAD
-<body id="preferencias">
-=======
 <body>
->>>>>>> e0802829b64a2719b38636ce48436a13dd57d0e8
     <div class="contIndexTres">
         <div class="logo_sospy">
             <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
@@ -155,48 +163,15 @@
         <div class="conImgBomb">
             <img src="img/police.png" class="img_opacy" alt="Responsive image" align="center">
         </div>
-<<<<<<< HEAD
 
         <div class="contTitlePref">
             <h3>Preferencia Policía:</h3>
         </div>
-
-        <div class="conPrefDetBomb">
-            <strong id="pref_title"><span style="color: red; text-decoration: underline;">Actual</span><span style="color: red;">:</span>-Campo 9</strong>
-            <!-- <h3>Preferencia Comisarias</h3> -->
-        </div>
-
-        <div class="cont_item">
-            <div class="contListOne">
-                <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Comisarias();">
-                    <option selected>Departamento</option>
-                </select>
-            </div>
-        
-            <div class="contListTwo">
-                <select class="contact2 custom-select" id="comisaria" onchange="guardarComisaria();">
-                    <option selected>Comisaria Cercana</option>
-                </select>
-            </div>
-        
-            <div class="contBtnFree">
-                <button class="fa fa-phone fa-lg btnTel" aria-hidden="true" onclick="llamarComisaria();"> Línea gratuita: 911</button>
-            </div>
-        </div>
-    </div>
-=======
-
-        <div class="contTitlePref">
-            <h3>Preferencia Policía:</h3>
-        </div>
->>>>>>> e0802829b64a2719b38636ce48436a13dd57d0e8
 
         <div class="conPrefDetBomb">
             <strong id="pref_title"><span style="color: red; text-decoration: underline;">Actual</span><span style="color: red;">:</span></strong>
         </div>
 
-<<<<<<< HEAD
-=======
         <div class="cont_item">
             <div class="contListOne">
                 <select class="contact1 custom-select" id="departamento" onclick="Departamentos();" onchange="Comisarias();">
@@ -226,7 +201,6 @@
 
     
 
->>>>>>> e0802829b64a2719b38636ce48436a13dd57d0e8
 
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
