@@ -59,7 +59,14 @@
 
                     for (var i = 0; i < nDepartamentos; i++) {
                         var fila = result.rows.item(i);
-                        htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        if(i == 0){
+                            var d = "Departamentos";
+                            htmlContenidoDepartamentos += "<option value=" + d + ">" + d + "</option>";
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        else{
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
                     }
                     $('#departamento').html(htmlContenidoDepartamentos);
                 }
@@ -82,7 +89,14 @@
                 if (nComisaria > 0) {
                     for (var i = 0; i < nComisaria; i++) {
                         var fila = result.rows.item(i);
-                        htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        if(i == 0){
+                            var d = "Comisarias";
+                            htmlCC += "<option value=" + d + ">" + d + "</option>";
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        else{
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
                     }
                     $('#comisaria').html(htmlCC);
                 }
@@ -160,8 +174,8 @@
             <img src="img/SOSPY.png" class="foto1 rounded mx-auto d-block" alt="Responsive image" align="left">
         </div>
 
-        <div class="conImgBomb">
-            <img src="img/police.png" class="img_opacy" alt="Responsive image" align="center">
+        <div class="conImgPolice">
+            <img src="img/police.png" class="img_opacy" alt="Responsive image" align="center" >
         </div>
 
         <div class="contTitlePref">

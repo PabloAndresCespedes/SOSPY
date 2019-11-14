@@ -97,7 +97,13 @@
 
                         for (var i = 0; i < nDepartamentos; i++) {
                             var fila = result.rows.item(i);
-                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            if(i == 0){
+                                var d = "Departamento";
+                                htmlContenidoDepartamentos += "<option value=" + d + ">" + d + "</option>";
+                                htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            }else{
+                                htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            }
                         }
                         $('#departamento').html(htmlContenidoDepartamentos);
                     }
@@ -116,7 +122,14 @@
                     if (nBombero > 0) {
                         for (var i = 0; i < nBombero; i++) {
                             var fila = result.rows.item(i);
-                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            if(i == 0){
+                                var d = "Comisarias";
+                                htmlCC += "<option value=" + d + ">" + d + "</option>";
+                                htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            }
+                            else{
+                                htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            }
                         }
                         $('#comisaria').html(htmlCC);
                         listarBomberos();
@@ -136,7 +149,14 @@
                     if (nBombero > 0) {
                         for (var i = 0; i < nBombero; i++) {
                             var fila = result.rows.item(i);
-                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            if(i == 0){
+                                var d = "Bomberos";
+                                htmlCC += "<option value=" + d + ">" + d + "</option>";
+                                htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";                                
+                            }
+                            else{
+                                htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                            }
                         }
                         $('#bombero').html(htmlCC);
                         $('#add_prf').removeClass('oculto');

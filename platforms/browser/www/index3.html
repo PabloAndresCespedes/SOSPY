@@ -57,7 +57,14 @@
 
                     for (var i = 0; i < nDepartamentos; i++) {
                         var fila = result.rows.item(i);
-                        htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        if(i = 0){
+                           var add = "<option value='0'>Departamentos</option>";
+                           htmlContenidoDepartamentos += add;
+                           htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        else{
+                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }                       
                     }
                     $('#departamento').html(htmlContenidoDepartamentos);
                 }
@@ -168,6 +175,8 @@
         <div class="conPrefDetBomb">
             <strong id="pref_title"><span style="color: red; text-decoration: underline;">Actual</span><span style="color: red;">:</span> </strong>
         </div>
+
+        <h4 class="titleChangePref heading-small text-muted mb-2">Cambiar preferencia Bomberos:</h6>
 
         <div class="cont_item">
             <div class="contListOne">
