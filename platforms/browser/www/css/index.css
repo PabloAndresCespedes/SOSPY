@@ -40,6 +40,12 @@ width: 60%;
   margin-top: 5px;
   border-radius: 20px;
  }
+ .depart{
+  border-radius: 20px;
+  border: 1px solid #041d35;
+  opacity: 0.8;
+  width: 250px; 
+ }
  .contact1{
   border-radius: 20px;
   border: 1px solid #041d35;
