@@ -139,8 +139,8 @@
             /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
             function insertarPreferencia(tx){
                 var dep_id_com  = $('#comisaria').val();
-
-                db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
+                if(dep_id_com == null){
+                    db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).maximo;
                         db.executeSql('INSERT INTO PREFERENCIAS VALUES (?,?)', [dato,dep_id_com], function (resultSet) {
                             //alert('Preferencia Comisaria guardada');
@@ -152,6 +152,7 @@
                 }, function(error) {
                   alert('error: ' + error.message);
                 });
+                }                
             }
 
             function insertarPreferencia2(){

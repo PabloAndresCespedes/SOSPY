@@ -285,3 +285,6 @@ html, body, .contIndexTres{
     justify-content: center;
     min-height: 30vh;
 }
+.oculto{
+  display: none;
+}

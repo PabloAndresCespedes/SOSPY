@@ -58,6 +58,15 @@
                 );
             }
 
+            function alertVacío(){
+                navigator.notification.alert(
+                    'Elija su preferencia',  // message
+                    sonidoSave,         // callback
+                    'Preferencia vacía',            // title
+                    'Entendido'                  // buttonName
+                );
+            }
+
             function onError(result) {
                 alert("Error:" + result);
             }
@@ -130,6 +139,7 @@
                             htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
                         }
                         $('#bombero').html(htmlCC);
+                        $('#add_prf').removeClass('oculto');
                     }
                     else {
                         alert("no hay datos");
@@ -139,6 +149,7 @@
             /*FUNCION QUE INSERTA LA PREFERENCIA DEL USUARIO*/
             function insertarPreferencia(tx){
                 var dep_id_com  = $('#comisaria').val();
+                var dep_id_bomb = $('#bombero').val();
 
                 db.executeSql("SELECT MAX((ID)+1) AS maximo FROM PREFERENCIAS", [], function (resultSet) {
                     var dato = resultSet.rows.item(0).maximo;
@@ -147,12 +158,12 @@
                             //alertComisaria();
                             insertarPreferencia2();
                         }, function(error) {
-                          alert('Tiene un error de: ' + error.message);
+                            console.log('Tiene un error de: ' + error.message);
+                        });
+                    }, function(error) {
+                        console.log('error: ' + error.message);
                     });
-                }, function(error) {
-                  alert('error: ' + error.message);
-                });
-            }
+                }               
 
             function insertarPreferencia2(){
                 var dep_id_bomb = $('#bombero').val();
@@ -163,10 +174,10 @@
                             alertPreferencia();
                             insertarInicio();
                         }, function(error) {
-                          alert('Tiene un error de: ' + error.message);
+                          console.log('Tiene un error de: ' + error.message);
                     });
                 }, function(error) {
-                  alert('error: ' + error.message);
+                  console.log('error: ' + error.message);
                 });
             }
 
@@ -225,7 +236,7 @@
         </div>
         
                
-        <button src="index2" class="siguiente btn btn-danger" type="button" onclick="insertarPreferencias();">
+        <button id="add_prf" src="index2" class="siguiente btn btn-danger oculto" type="button" onclick="insertarPreferencias();">
             <!--<a href="index2.html"></a>-->
             <i class="fa fa-angle-right" aria-hidden="true"></i>
         </button>
