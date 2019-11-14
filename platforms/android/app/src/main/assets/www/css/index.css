@@ -256,7 +256,7 @@ html, body, .contIndexTres{
   margin-left: 12%;
 }
 .cont_item{
-  top: 50%;
+  top: 45%;
   position: fixed;
   width: 100%;
   display: grid;
@@ -290,4 +290,8 @@ html, body, .contIndexTres{
      /* align-items: center; */
     justify-content: center;
     min-height: 30vh;
+}
+.titleChangePref{
+  margin-top: 50%;
+  text-align: center;
 }
