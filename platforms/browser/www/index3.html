@@ -57,9 +57,9 @@
 
                     for (var i = 0; i < nDepartamentos; i++) {
                         var fila = result.rows.item(i);
-                        if(i = 0){
-                           var add = "<option value='0'>Departamentos</option>";
-                           htmlContenidoDepartamentos += add;
+                        if(i == 0){
+                           var dep = "Departamentos";
+                           htmlContenidoDepartamentos += "<option value=" + dep + ">" + dep + "</option>";
                            htmlContenidoDepartamentos += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
                         }
                         else{
@@ -97,7 +97,14 @@
                 if (nBombero > 0) {
                     for (var i = 0; i < nBombero; i++) {
                         var fila = result.rows.item(i);
-                        htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        if(i == 0){
+                            var d = "Bomberos";
+                            htmlCC += "<option value=" + d + ">" + d + "</option>";
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
+                        else{
+                            htmlCC += "<option value=" + fila['ID'] + ">" + fila['DESCRIPCION'] + "</option>";
+                        }
                     }
                     $('#bombero').html(htmlCC);
                 }
@@ -165,7 +172,7 @@
         </div>
 
         <div class="conImgBomb">
-            <img src="img/bombero.png" class="img_opacy" alt="Responsive image" align="center">
+            <img src="img/New_Bomb.png" class="img_opacy" alt="Responsive image" align="center">
         </div>
 
         <div class="contTitlePref">

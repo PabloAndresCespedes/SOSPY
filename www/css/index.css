@@ -291,13 +291,12 @@ html, body, .contIndexTres{
     justify-content: center;
     min-height: 30vh;
 }
-<<<<<<< HEAD
 .oculto{
   display: none;
 }
-=======
+
 .titleChangePref{
   margin-top: 50%;
   text-align: center;
 }
->>>>>>> f47691a8d48eb703755ebad50fed7b1e40aa6d57
+
